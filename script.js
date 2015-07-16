@@ -3,6 +3,7 @@ var height;
 var cells = [];
 var colors = ['yellow'];//, 'green', 'yellow', 'blue'];
 var food = [];
+var growth = 0.5;
 var waters = [];
 var currentCanvas = 0;
 var canvases = [];
@@ -127,7 +128,7 @@ function update() {
 	if(cells.length > 1000 || food.length > 10000)
 		return;
 
-	if(Math.random()<0.1)
+	if(Math.random()<growth)
 		food.push(new Food(Vector.random(25, 25, width-50, height-50), Math.random()*10+1));
 
 	for(var i=cells.length-1; i>=0; i--) {
@@ -180,6 +181,11 @@ function play() {
 	}
 }
 
+function plants() {
+	var v = $('#plants').val();
+	growth = v/100;
+}
+
 $(function(){
 	width = $('canvas').get(0).width;
 	height = $('canvas').get(0).height;
@@ -208,5 +214,8 @@ $(function(){
 	cells.push(ncell);
 	
 	$('#play').click(play);
+	$('#plants').change(plants);
+	
+	plants();
 	update();
 })
