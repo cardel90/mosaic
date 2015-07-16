@@ -156,8 +156,10 @@ function update() {
 	if(cells.length > 1000 || food.length > 10000)
 		return;
 
-	if(Math.random()<growth)
+	if(food.length<growth)
 		food.push(new Food(Vector.random(25, 25, width-50, height-50), Math.random()*10+1));
+	if(food.length>growth)
+		food.splice(0,1);
 
 	for(var i=cells.length-1; i>=0; i--) {
 		var cell = cells[i];
@@ -220,7 +222,7 @@ function changeSpeed() {
 
 function plants() {
 	var v = $('#plants').val();
-	growth = v/100;
+	growth = v;
 }
 
 $(function(){
