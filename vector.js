@@ -53,6 +53,14 @@ Vector.prototype.dotReduced = function(v) {
 	return (this.x*v.x + this.y*v.y)/(this.length()*v.length());
 }
 
+Vector.prototype.mulMatrix = function(matrix) {
+	return new Vector(this.x*matrix[0][0] + this.y*matrix[0][1], this.y*matrix[1][1] + this.x*matrix[1][0]);
+}
+
+Vector.prototype.angle = function() {
+	return Math.atan2(this.y, this.x);
+}
+
 Vector.random = function(x, y, w, h) {
 	return new Vector(x + Math.random()*w, y+Math.random()*h);
 }
