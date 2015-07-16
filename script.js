@@ -1,7 +1,7 @@
 var width;
 var height;
 var cells = [];
-var colors = ['yellow'];//, 'green', 'yellow', 'blue'];
+var colors = ['yellow', 'blue'];
 var food = [];
 var growth = 0.5;
 var speed = 20;
@@ -113,7 +113,7 @@ Cell.prototype.draw = function(ctx) {
 Cell.prototype.sim = function() {
 
 	this.fat -= (Math.random()*0.02);
-	this.velocity = new Vector(0, 0);
+	var desired = new Vector(0, 0);
 	
 	for(var i=0; i<this.behaviors.length; i++) {
 		if(this.behaviors[i].prepare)
@@ -130,7 +130,7 @@ Cell.prototype.sim = function() {
 	
 	// perform biggest need
 	this.needs.sort(compare);
-	this.velocity = this.velocity.plus(this.needs[0].perform());
+	desired = desired.plus(this.needs[0].perform());
 	
 	// perform average of all behaviors
 	var c = 0;
@@ -140,13 +140,14 @@ Cell.prototype.sim = function() {
 		v = v.plus(vect);
 		c++;
 	}
-	this.velocity = this.velocity.plus(v.scale(2/c));
+	desired = desired.plus(v.scale(2/c));
 	
-	this.velocity = this.velocity.capLength(2);
+	desired = desired.capLength(2);
 	
-	this.velocity = this.velocity.scale(0.6*(20-this.fat)/20 + 0.7);
+	desired = desired.scale(0.6*(20-this.fat)/20 + 0.7);
 	if(this.color === 'red')
-		this.velocity = this.velocity.scale(2);
+		desired = desired.scale(2);
+	this.velocity = this.velocity.plus(desired.minus(this.velocity).scale(0.1));
 	this.position = this.position.plus(this.velocity);
 }
 
