@@ -1,3 +1,10 @@
+function loadAspect(cell, name) {
+	var aspects = {
+		'looking': Looking
+	};
+	cell.aspects.push(new aspects[name](cell));
+}
+
 function Looking(cell) {
 	this.cell = cell;
 	this.angle = Math.PI*3/4;

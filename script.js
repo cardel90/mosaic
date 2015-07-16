@@ -62,14 +62,15 @@ var Cell = function(pos, color){
 	this.fat = 15;
 	this.color = color;
 	this.gender = Math.random()<0.1 ? 1 : 0;
-	this.aspects = [new Looking(this)];
+	this.aspects = [];
+	loadAspect(this, 'looking');
 }
 
 Cell.prototype.makeChild = function(position) {
 	var ncell = new Cell(this.position, this.color);
 	// TODO: deep clone of parent
-	ncell.behaviors = [new Looking(ncell), new Herding(ncell), new FromOthers(ncell), new FromWater(ncell), new FromWalls(ncell)];
-	ncell.needs = [new RunningAway(ncell), new Mating(ncell), new Feeding(ncell), new Wandering(ncell)];
+	ncell.behaviors = [new Herding(ncell), new FromOthers(ncell), new FromWater(ncell), new FromWalls(ncell)];
+	ncell.needs = [new Feeding(ncell), new Mating(ncell), new Wandering(ncell)];
 	ncell.cells = cells;
 	ncell.fat = 7;
 	cells.push(ncell);
@@ -134,10 +135,14 @@ Cell.prototype.sim = function() {
 			this.aspects[i].prepare();
 	}
 	
+	for(var i=0; i<this.aspects.length; i++) {
+		if(this.aspects[i].perform)
+			this.aspects[i].perform();
+	}
+	
 	var compare = function(a,b){
 		return b.priority() - a.priority();
 	}
-	
 	// perform biggest need
 	this.needs.sort(compare);
 	desired = desired.plus(this.needs[0].perform());
