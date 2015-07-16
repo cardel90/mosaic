@@ -65,6 +65,7 @@ var Cell = function(pos, color){
 	this.aspects = [];
 	loadAspect(this, 'looking');
 	loadAspect(this, 'walking');
+	loadAspect(this, 'eating');
 }
 
 Cell.prototype.makeChild = function(position) {
@@ -94,6 +95,10 @@ Cell.prototype.nearestCells = function(condition) {
 	return result;
 }
 
+Cell.prototype.getAspect = function(name) {
+	return this.aspects[name];
+}
+
 Cell.prototype.draw = function(ctx) {
 	ctx.strokeStyle = 'black';
 	ctx.fillStyle = this.color;
@@ -119,8 +124,6 @@ Cell.prototype.draw = function(ctx) {
 }
 
 Cell.prototype.sim = function() {
-
-	this.fat -= (Math.random()*0.02);
 
 	for(var a in this.aspects) {
 		if(this.aspects[a].prepare)

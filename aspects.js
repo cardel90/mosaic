@@ -1,10 +1,33 @@
 
 function loadAspect(cell, name) {
 	var aspects = {
+		'eating': Eating,
 		'walking': Walking,
 		'looking': Looking
 	};
 	cell.aspects[name] = (new aspects[name](cell));
+}
+
+function Eating(cell) {
+	this.cell = cell;
+	this.fat = 15;
+	this.hunger = 0;
+}
+
+Eating.prototype.perform = function() {	
+	this.fat -= (Math.random()*0.02);
+	
+	if(this.fat < 10)
+		this.hunger += (10-this.fat)/10;
+	if(this.fat > 15)
+		this.hunger = 0;
+	
+	// for legacy
+	this.cell.fat = this.fat;
+}
+
+Eating.prototype.feed = function(amount) {
+	this.fat += amount;
 }
 
 function Looking(cell) {

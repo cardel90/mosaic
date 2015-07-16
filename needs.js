@@ -1,14 +1,9 @@
 
 function Feeding(cell) {
 	this.cell = cell;
-	this.hunger = 0;
 }
 
 Feeding.prototype.prepare = function() {
-	if(this.cell.fat < 10)
-		this.hunger += (10-this.cell.fat)/10;
-	if(this.cell.fat > 15)
-		this.hunger = 0;
 	this.target = this.findFood();
 }
 
@@ -42,7 +37,7 @@ Feeding.prototype.perform = function() {
 	var d = this.target.position.distance(this.cell.position) - this.target.amount - this.cell.fat;
 	if(d < 5) {		
 		this.target.amount -= 0.1;
-		this.cell.fat += 0.1;
+		this.cell.getAspect('eating').feed(0.1);
 	}
 	if(d<0)
 		return new Vector(0, 0);
@@ -60,7 +55,7 @@ Feeding.prototype.draw = function(ctx) {
 }
 
 Feeding.prototype.priority = function() {
-	return this.target === undefined ? 0 : this.hunger;
+	return this.target === undefined ? 0 : this.cell.getAspect('eating').hunger;
 }
 
 
@@ -143,7 +138,6 @@ Mating.prototype.priority = function() {
 
 function Hunting(cell) {
 	this.cell = cell;
-	this.hunger = 0;
 }
 
 Hunting.prototype.findPrey = function() {
@@ -154,10 +148,6 @@ Hunting.prototype.findPrey = function() {
 }
 
 Hunting.prototype.prepare = function() {
-	if(this.cell.fat < 10)
-		this.hunger += (10-this.cell.fat)/10;
-	if(this.cell.fat > 15)
-		this.hunger = 0;
 	this.prey = this.findPrey();
 }
 
@@ -165,9 +155,10 @@ Hunting.prototype.perform = function() {
 	if(this.prey === undefined)
 		return new Vector(0, 0);
 	var d = this.prey.position.distance(this.cell.position) - this.prey.fat - this.cell.fat;
-	if(d < 5) {		
-		this.cell.fat += this.prey.fat;
-		this.prey.fat = 0;
+	if(d < 5) {
+		this.cell.getAspect('eating').feed(this.prey.fat);
+		// should this be in eating?
+		this.prey.getAspect('eating').fat = 0;
 		return new Vector(0, 0);
 	}
 		
@@ -183,7 +174,7 @@ Hunting.prototype.draw = function(ctx) {
 };
 
 Hunting.prototype.priority = function() {
-	return this.prey === undefined ? 0 : this.hunger;
+	return this.prey === undefined ? 0 : this.cell.getAspect('eating').hunger;
 }
 
 /*
