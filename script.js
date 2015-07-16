@@ -36,8 +36,8 @@ function makePredator(position) {
 function makeHerbivore(position) {
 	var color = colors[Math.floor(Math.random()*colors.length)];
 	var ncell = new Cell(Vector.random(25, 25, width-50, height-50), color);
-	ncell.behaviors = [new Looking(ncell), new Herding(ncell), new FromOthers(ncell), new FromWater(ncell), new FromWalls(ncell)];
-	ncell.needs = [new RunningAway(ncell), new Mating(ncell), new Feeding(ncell), new Wandering(ncell)];
+	ncell.behaviors = [new Herding(ncell), new FromOthers(ncell), new FromWater(ncell), new FromWalls(ncell)];
+	ncell.needs = [new Feeding(ncell), new Mating(ncell), new Wandering(ncell)];
 	ncell.cells = cells;
 	cells.push(ncell);
 }
@@ -62,6 +62,7 @@ var Cell = function(pos, color){
 	this.fat = 15;
 	this.color = color;
 	this.gender = Math.random()<0.1 ? 1 : 0;
+	this.aspects = [new Looking(this)];
 }
 
 Cell.prototype.makeChild = function(position) {
@@ -107,6 +108,11 @@ Cell.prototype.draw = function(ctx) {
 	
 	if(this.needs[0].draw)
 		this.needs[0].draw(ctx);
+	
+	for(var i=0; i<this.aspects.length; i++) {
+		if(this.aspects[i].draw)
+			this.aspects[i].draw(ctx);
+	}
 }
 
 Cell.prototype.sim = function() {
@@ -121,6 +127,11 @@ Cell.prototype.sim = function() {
 	
 	for(var i=0; i<this.needs.length; i++) {
 		this.needs[i].prepare();
+	}
+	
+	for(var i=0; i<this.aspects.length; i++) {
+		if(this.aspects[i].prepare)
+			this.aspects[i].prepare();
 	}
 	
 	var compare = function(a,b){
@@ -235,8 +246,8 @@ $(function(){
 	for(var i=0; i<30; i++) {
 		makeHerbivore(Vector.random(25, 25, width-50, height-50));
 	}
-	makePredator(Vector.random(25, 25, width-50, height-50));
-	makePredator(Vector.random(25, 25, width-50, height-50));
+	//makePredator(Vector.random(25, 25, width-50, height-50));
+	//makePredator(Vector.random(25, 25, width-50, height-50));
 	
 	$('#play').click(play);
 	$('#plants').change(plants);
