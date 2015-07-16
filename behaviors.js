@@ -32,18 +32,22 @@ function FromOthers(cell) {
 	this.tab = [];
 }
 
+FromOthers.modifiedDistance = function(from, to) {
+	return from.distance(to)-1.1*to.fat-from.fat - (to.color === 'red' ? 5 : 0);
+}
+
 FromOthers.prototype.prepare = function() {
 	var x = 0;
 	var y = 0;
 	
 	var tcell = this.cell;
 	this.tab = this.cell.nearestCells(function(c){
-		return c!==tcell && c.distance(tcell)<(1.1*c.fat+tcell.fat+15);
+		return c!==tcell && FromOthers.modifiedDistance(tcell, c)<15;
 	});
 	
 	for(var i=0; i<this.tab.length; i++) {
 		var c = this.tab[i];
-		var d = this.cell.distance(c)-1.1*c.fat-tcell.fat;
+		var d = FromOthers.modifiedDistance(tcell, c);
 		var v = this.cell.vectorTo(c);
 		x -= 1*v.x/(d*d);
 		y -= 1*v.y/(d*d);
@@ -87,7 +91,7 @@ FromWalls.prototype.prepare = function() {
 };
 
 FromWalls.prototype.perform = function() {
-	return this.v.scale(2);
+	return this.v.scale(5);
 };
 
 

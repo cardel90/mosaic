@@ -145,7 +145,7 @@ Cell.prototype.sim = function() {
 	
 	this.velocity = this.velocity.scale(0.6*(20-this.fat)/20 + 0.7);
 	if(this.color === 'red')
-		this.velocity = this.velocity.scale(1.5);
+		this.velocity = this.velocity.scale(2);
 	this.position = this.position.plus(this.velocity);
 }
 
