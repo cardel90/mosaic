@@ -1,5 +1,6 @@
 function loadAspect(cell, name) {
 	var aspects = {
+		'walking': Walking,
 		'looking': Looking
 	};
 	cell.aspects.push(new aspects[name](cell));
@@ -58,3 +59,51 @@ Looking.prototype.perform = function() {
 	});
 }
 
+function Walking(cell) {
+	this.cell = cell;
+	this.velocity = new Vector(0, 0);
+}
+
+Walking.prototype.prepare = function() {
+	var desired = new Vector(0, 0);
+	
+	for(var i=0; i<this.cell.behaviors.length; i++) {
+		if(this.cell.behaviors[i].prepare)
+			this.cell.behaviors[i].prepare();
+	}
+	
+	for(var i=0; i<this.cell.needs.length; i++) {
+		this.cell.needs[i].prepare();
+	}
+	
+	var compare = function(a,b){
+		return b.priority() - a.priority();
+	}
+	// perform biggest need
+	this.cell.needs.sort(compare);
+	desired = desired.plus(this.cell.needs[0].perform());
+	
+	// perform average of all behaviors
+	var c = 0;
+	var v = new Vector(0, 0);
+	for(var i=0; i<this.cell.behaviors.length; i++) {
+		var vect = this.cell.behaviors[i].perform();
+		v = v.plus(vect);
+		c++;
+	}
+	desired = desired.plus(v.scale(2/c));
+	
+	desired = desired.capLength(2);
+	
+	desired = desired.scale(0.6*(20-this.cell.fat)/20 + 0.7);
+	if(this.cell.color === 'red')
+		desired = desired.scale(2);
+	this.velocity = this.velocity.plus(desired.minus(this.velocity).scale(0.1));
+	
+	// for legacy
+	this.cell.velocity = this.velocity;
+}
+
+Walking.prototype.perform = function() {
+	this.cell.position = this.cell.position.plus(this.velocity);
+}

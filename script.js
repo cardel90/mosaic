@@ -64,6 +64,7 @@ var Cell = function(pos, color){
 	this.gender = Math.random()<0.1 ? 1 : 0;
 	this.aspects = [];
 	loadAspect(this, 'looking');
+	loadAspect(this, 'walking');
 }
 
 Cell.prototype.makeChild = function(position) {
@@ -120,17 +121,7 @@ Cell.prototype.draw = function(ctx) {
 Cell.prototype.sim = function() {
 
 	this.fat -= (Math.random()*0.02);
-	var desired = new Vector(0, 0);
-	
-	for(var i=0; i<this.behaviors.length; i++) {
-		if(this.behaviors[i].prepare)
-			this.behaviors[i].prepare();
-	}
-	
-	for(var i=0; i<this.needs.length; i++) {
-		this.needs[i].prepare();
-	}
-	
+
 	for(var i=0; i<this.aspects.length; i++) {
 		if(this.aspects[i].prepare)
 			this.aspects[i].prepare();
@@ -140,31 +131,6 @@ Cell.prototype.sim = function() {
 		if(this.aspects[i].perform)
 			this.aspects[i].perform();
 	}
-	
-	var compare = function(a,b){
-		return b.priority() - a.priority();
-	}
-	// perform biggest need
-	this.needs.sort(compare);
-	desired = desired.plus(this.needs[0].perform());
-	
-	// perform average of all behaviors
-	var c = 0;
-	var v = new Vector(0, 0);
-	for(var i=0; i<this.behaviors.length; i++) {
-		var vect = this.behaviors[i].perform();
-		v = v.plus(vect);
-		c++;
-	}
-	desired = desired.plus(v.scale(2/c));
-	
-	desired = desired.capLength(2);
-	
-	desired = desired.scale(0.6*(20-this.fat)/20 + 0.7);
-	if(this.color === 'red')
-		desired = desired.scale(2);
-	this.velocity = this.velocity.plus(desired.minus(this.velocity).scale(0.1));
-	this.position = this.position.plus(this.velocity);
 }
 
 function update() {
