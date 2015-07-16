@@ -122,14 +122,14 @@ Cell.prototype.sim = function() {
 
 	this.fat -= (Math.random()*0.02);
 
-	for(var i=0; i<this.aspects.length; i++) {
-		if(this.aspects[i].prepare)
-			this.aspects[i].prepare();
+	for(var a in this.aspects) {
+		if(this.aspects[a].prepare)
+			this.aspects[a].prepare();
 	}
 	
-	for(var i=0; i<this.aspects.length; i++) {
-		if(this.aspects[i].perform)
-			this.aspects[i].perform();
+	for(var a in this.aspects) {
+		if(this.aspects[a].perform)
+			this.aspects[a].perform();
 	}
 }
 

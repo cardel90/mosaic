@@ -1,9 +1,10 @@
+
 function loadAspect(cell, name) {
 	var aspects = {
 		'walking': Walking,
 		'looking': Looking
 	};
-	cell.aspects.push(new aspects[name](cell));
+	cell.aspects[name] = (new aspects[name](cell));
 }
 
 function Looking(cell) {
