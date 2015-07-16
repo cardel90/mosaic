@@ -11,9 +11,14 @@
 	<link rel="Stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
+	<aside>
+		<button id="play">Play</button><br>
+		<label for="speed">Speed</label>
+		<input id="speed" type="range" min="0" max="100" step="1" value="70" /><br>
+		<label for="plants">Plant growth</label>
+		<input id="plants" type="range" min="0" max="100" step="1" value="10" />
+	</aside>
 	
-	<button id="play">Play</button>
-	<input id="plants" type="range" min="0" max="100" step="1" value="10" />
 	<canvas id="canvas1" width="1000" height="800">
 	No canvas.
 	</canvas>
@@ -21,6 +26,5 @@
 	<canvas id="canvas2" width="1000" height="800">
 	No canvas.
 	</canvas>
-	
 </body>
 </html>

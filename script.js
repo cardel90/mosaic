@@ -4,6 +4,7 @@ var cells = [];
 var colors = ['yellow'];//, 'green', 'yellow', 'blue'];
 var food = [];
 var growth = 0.5;
+var speed = 20;
 var waters = [];
 var currentCanvas = 0;
 var canvases = [];
@@ -199,11 +200,20 @@ function repaint() {
 function play() {
 	if(interval === undefined) {
 		$('#play').text('Stop');
-		interval = setInterval(update, 20);
+		interval = setInterval(update, speed);
 	} else {
 		clearInterval(interval);
 		interval = undefined;
 		$('#play').text('Play');
+	}
+}
+
+function changeSpeed() {
+	var v = $('#speed').val();
+	speed = 100-v;
+	if(interval !== undefined) {
+		play();
+		play();
 	}
 }
 
@@ -228,7 +238,9 @@ $(function(){
 	
 	$('#play').click(play);
 	$('#plants').change(plants);
-	
+	$('#speed').change(changeSpeed);
+
+	changeSpeed();
 	plants();
 	update();
 	
