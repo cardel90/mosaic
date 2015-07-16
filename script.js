@@ -6,6 +6,7 @@ var food = [];
 var waters = [];
 var currentCanvas = 0;
 var canvases = [];
+var interval;
 
 function Water(position, radius) {
 	this.position = position;
@@ -168,6 +169,17 @@ function repaint() {
 	canvases[currentCanvas].style.visibility = 'hidden';
 }
 
+function play() {
+	if(interval === undefined) {
+		$('#play').text('Stop');
+		interval = setInterval(update, 20);
+	} else {
+		clearInterval(interval);
+		interval = undefined;
+		$('#play').text('Play');
+	}
+}
+
 $(function(){
 	width = $('canvas').get(0).width;
 	height = $('canvas').get(0).height;
@@ -195,5 +207,6 @@ $(function(){
 	ncell.fat = 10;
 	cells.push(ncell);
 	
-	setInterval(update, 20);
+	$('#play').click(play);
+	update();
 })
