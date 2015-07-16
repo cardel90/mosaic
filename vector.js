@@ -52,3 +52,7 @@ Vector.prototype.dot = function(v) {
 Vector.prototype.dotReduced = function(v) {
 	return (this.x*v.x + this.y*v.y)/(this.length()*v.length());
 }
+
+Vector.random = function(x, y, w, h) {
+	return new Vector(x + Math.random()*w, y+Math.random()*h);
+}

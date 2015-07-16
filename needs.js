@@ -66,12 +66,12 @@ Feeding.prototype.priority = function() {
 function Wandering(cell) {
 	this.cell = cell;
 	this.speed = new Vector(0, 0);
-	this.target = new Vector(25+Math.random()*(width-50), 25+Math.random()*(height-50));
+	this.target = Vector.random(25, 25, width-50, height-50);
 }
 
 Wandering.prototype.prepare = function() {
 	if(Math.random()<0.001 || this.target.distance(this.cell.position)<10)
-		this.target = new Vector(25+Math.random()*(width-50), 25+Math.random()*(height-50));
+		this.target = Vector.random(25, 25, width-50, height-50);
 	var desired = this.target.minus(this.cell.position).normalize();
 	this.speed = this.speed.plus(desired.minus(this.speed).normalize().scale(0.01));
 }

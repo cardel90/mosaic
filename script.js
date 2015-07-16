@@ -79,13 +79,11 @@ Cell.prototype.draw = function(ctx) {
 	
 	if(this.needs[0].draw)
 		this.needs[0].draw(ctx);
-	
 }
 
 Cell.prototype.sim = function() {
 
 	this.fat -= (Math.random()*0.02);
-	//this.velocity = new Vector(2*Math.random()-1, 2*Math.random()-1);
 	this.velocity = new Vector(0, 0);
 	
 	for(var i=0; i<this.behaviors.length; i++) {
@@ -129,9 +127,7 @@ function update() {
 		return;
 
 	if(Math.random()<0.1)
-		food.push(new Food(
-			new Vector(25+Math.random()*(width-50), 25+Math.random()*(height-50)),
-			Math.random()*10+1));
+		food.push(new Food(Vector.random(25, 25, width-50, height-50), Math.random()*10+1));
 
 	for(var i=cells.length-1; i>=0; i--) {
 		var cell = cells[i];
@@ -182,17 +178,17 @@ $(function(){
 	
 	for(var i=0; i<30; i++) {
 		var color = colors[Math.floor(Math.random()*colors.length)];
-		cells[i] = new Cell(new Vector(25+Math.random()*(width-50), 25+Math.random()*(height-50)), color);
+		cells[i] = new Cell(Vector.random(25, 25, width-50, height-50), color);
 		cells[i].cells = cells;
 	}
-	var ncell = new Cell(new Vector(25+Math.random()*(width-50), 25+Math.random()*(height-50)), 'red');
+	var ncell = new Cell(Vector.random(25, 25, width-50, height-50), 'red');
 	ncell.behaviors = [new FromWater(ncell), new FromWalls(ncell)];
 	ncell.needs = [new Hunting(ncell), new Wandering(ncell)]; 
 	ncell.cells = cells;
 	ncell.fat = 10;
 	cells.push(ncell);
 	
-	ncell = new Cell(new Vector(25+Math.random()*(width-50), 25+Math.random()*(height-50)), 'red');
+	ncell = new Cell(Vector.random(25, 25, width-50, height-50), 'red');
 	ncell.behaviors = [new FromWater(ncell), new FromWalls(ncell)];
 	ncell.needs = [new Hunting(ncell), new Wandering(ncell)]; 
 	ncell.cells = cells;
