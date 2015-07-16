@@ -72,7 +72,7 @@ Cell.prototype.makeChild = function(position) {
 	ncell.cells = cells;
 	ncell.fat = 7;
 	cells.push(ncell);
-	ncell.update();
+	ncell.sim();
 }
 
 Cell.prototype.vectorTo = function(other) {
