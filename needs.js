@@ -50,6 +50,7 @@ Feeding.prototype.perform = function() {
 };
 
 Feeding.prototype.draw = function(ctx) {
+	ctx.beginPath();
 	ctx.strokeStyle = 'green';
 	if(this.target !== undefined) {
 		ctx.moveTo(this.cell.position.x,this.cell.position.y);
@@ -82,6 +83,7 @@ Wandering.prototype.perform = function() {
 
 Wandering.prototype.draw = function(ctx) {
 	return;
+	ctx.beginPath();
 	ctx.strokeStyle = '#CCCCCC';
 	ctx.moveTo(this.cell.position.x, this.cell.position.y);
 	ctx.lineTo(this.target.x, this.target.y);
@@ -124,6 +126,7 @@ Mating.prototype.perform = function() {
 };
 
 Mating.prototype.draw = function(ctx) {
+	ctx.beginPath();
 	ctx.strokeStyle = '#FF77DD';
 	ctx.moveTo(this.cell.position.x, this.cell.position.y);
 	ctx.lineTo(this.mate.position.x, this.mate.position.y);
@@ -172,6 +175,7 @@ Hunting.prototype.perform = function() {
 };
 
 Hunting.prototype.draw = function(ctx) {
+	ctx.beginPath();
 	ctx.strokeStyle = '#FF0000';
 	ctx.moveTo(this.cell.position.x, this.cell.position.y);
 	ctx.lineTo(this.prey.position.x, this.prey.position.y);
@@ -235,6 +239,7 @@ RunningAway.prototype.perform = function() {
 };
 
 RunningAway.prototype.draw = function(ctx) {
+	ctx.beginPath();
 	ctx.strokeStyle = 'yellow';
 	ctx.moveTo(this.cell.position.x, this.cell.position.y);
 	ctx.lineTo(this.hunter.position.x, this.hunter.position.y);
