@@ -114,11 +114,7 @@ Mating.prototype.prepare = function() {
 Mating.prototype.perform = function() {
 	if(this.mate !== undefined && this.mate.position.distance(this.cell.position) < 30) {
 		
-		var ncell = new Cell(this.cell.position.plus(this.mate.position).scale(0.5),
-			this.cell.color);
-		ncell.cells = cells;
-		ncell.fat = 7;
-		cells.push(ncell);
+		this.cell.makeChild(this.cell.position.plus(this.mate.position).scale(0.5));
 		
 		this.horny = -1;
 		return new Vector(0, 0);
