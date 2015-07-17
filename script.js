@@ -25,7 +25,7 @@ Water.prototype.draw = function(ctx) {
 }
 
 function makePredator(position) {
-	var ncell = new Cell(position, 'red');
+	var ncell = new Cell(position, 'red', []);
 	ncell.cells = cells;
 	ncell.fat = 10;
 	cells.push(ncell);
@@ -33,7 +33,7 @@ function makePredator(position) {
 
 function makeHerbivore(position) {
 	var color = colors[Math.floor(Math.random()*colors.length)];
-	var ncell = new Cell(Vector.random(25, 25, width-50, height-50), color);
+	var ncell = new Cell(Vector.random(25, 25, width-50, height-50), color, ['looking', 'herding', 'fromOthers', 'fromWalls', 'eating', 'grazing', 'mating', 'wandering', 'walking']);
 	ncell.cells = cells;
 	cells.push(ncell);
 }
@@ -52,26 +52,20 @@ Food.prototype.draw = function(ctx) {
 	ctx.fill();
 }
 
-var Cell = function(pos, color){
+var Cell = function(pos, color, aspectNames){
 	this.position = pos;
 	this.velocity = new Vector(0, 0);
 	this.fat = 15;
 	this.color = color;
 	this.gender = Math.random()<0.1 ? 1 : 0;
-	this.aspects = [];
-	loadAspect(this, 'looking');
-	loadAspect(this, 'walking');
-	loadAspect(this, 'eating');
-	loadAspect(this, 'wandering');
-	loadAspect(this, 'grazing');
-	loadAspect(this, 'herding');
-	loadAspect(this, 'fromOthers');
-	loadAspect(this, 'fromWalls');
-	loadAspect(this, 'mating');
+	this.aspects = {};
+	for(var i=0; i<aspectNames.length; i++) {
+		loadAspect(this, aspectNames[i]);
+	}
 }
 
 Cell.prototype.makeChild = function(position) {
-	var ncell = new Cell(this.position.plus(new Vector(10, 10)), this.color);
+	var ncell = new Cell(this.position.plus(new Vector(10, 10)), this.color, ['looking', 'herding', 'fromOthers', 'fromWalls', 'eating', 'grazing', 'mating', 'wandering', 'walking']);
 	ncell.cells = cells;
 	ncell.fat = 7;
 	cells.push(ncell);
