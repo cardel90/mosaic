@@ -198,8 +198,8 @@ function repaint() {
 	}
 	
 	canvases[currentCanvas].style.visibility = 'visible';
-	currentCanvas = 1-currentCanvas;
-	canvases[currentCanvas].style.visibility = 'hidden';
+	//currentCanvas = 1-currentCanvas;
+	//canvases[currentCanvas].style.visibility = 'hidden';
 }
 
 function play() {
