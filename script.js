@@ -9,6 +9,7 @@ var waters = [];
 var currentCanvas = 0;
 var canvases = [];
 var interval;
+var selected;
 
 function Water(position, radius) {
 	this.position = position;
@@ -102,6 +103,13 @@ Cell.prototype.draw = function(ctx) {
 	ctx.stroke();
 	ctx.fill();
 	ctx.closePath();
+
+	if(this === selected) {
+		ctx.beginPath();
+		ctx.arc(this.position.x, this.position.y, this.fat+5, 0, 2*Math.PI);
+		ctx.stroke();
+		ctx.closePath();
+	}
 	
 	for(var i=0; i<aspectOrder.length; i++) {
 		var a = aspectOrder[i];
@@ -219,6 +227,18 @@ function plants() {
 	growth = v;
 }
 
+function click(e) {
+	var x = e.pageX - $(this).offset().left,
+		y = e.pageY - $(this).offset().top,
+		v = new Vector(x, y);
+	console.log(v);
+	for(var i=0; i<cells.length; i++) {
+		if(cells[i].position.distance(v) <= cells[i].fat) {
+			selected = cells[i];
+		}
+	}
+}
+
 $(function(){
 	width = $('canvas').get(0).width;
 	height = $('canvas').get(0).height;
@@ -236,10 +256,12 @@ $(function(){
 	$('#play').click(play);
 	$('#plants').change(plants);
 	$('#speed').change(changeSpeed);
+	$('#canvas1').click(click);
+	$('#canvas2').click(click);
 
 	changeSpeed();
 	plants();
 	update();
 	
-	play();
+//	play();
 })

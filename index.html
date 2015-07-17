@@ -11,11 +11,14 @@
 </head>
 <body>
 	<aside>
-		<button id="play">Play</button><br>
-		<label for="speed">Speed</label>
-		<input id="speed" type="range" min="0" max="100" step="1" value="70" /><br>
-		<label for="plants">Plant amount</label>
-		<input id="plants" type="range" min="0" max="500" step="1" value="50" />
+		<div id="controls">
+			<button id="play">Play</button><br>
+			<label for="speed">Speed</label>
+			<input id="speed" type="range" min="0" max="100" step="1" value="70" /><br>
+			<label for="plants">Plant amount</label>
+			<input id="plants" type="range" min="0" max="500" step="1" value="50" />
+		</div>
+		<div id="cell"></div>
 	</aside>
 	
 	<canvas id="canvas1" width="1000" height="800">
