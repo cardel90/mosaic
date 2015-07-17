@@ -86,6 +86,7 @@ Looking.prototype.perform = function() {
 function Walking(cell) {
 	this.cell = cell;
 	this.velocity = new Vector(0, 0);
+	this.force = new Vector(0, 0);
 }
 
 Walking.prototype.prepare = function() {

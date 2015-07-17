@@ -129,10 +129,29 @@ Cell.prototype.sim = function() {
 		if(this.aspects[a].prepare)
 			this.aspects[a].prepare();
 	}
+
+	// find top priority
+	var top = undefined;
+	var max = -1;
 	
 	for(var a in this.aspects) {
-		if(this.aspects[a].perform)
-			this.aspects[a].perform();
+		if(this.aspects[a].priority) {
+			var p = this.aspects[a].priority();
+			if(p>max) {
+				max = p;
+				top = aspects[a];
+			}
+		}
+	}
+	
+	// perform aspects with no priority and the top one
+	for(var a in this.aspects) {
+		var asp = this.aspects[a];
+		if(asp.perform) {
+			if(!asp.priority || asp.priority()===0 || asp===top) {
+				asp.perform();
+			}
+		}
 	}
 }
 
