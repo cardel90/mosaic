@@ -93,7 +93,7 @@ function Walking(cell) {
 }
 
 Walking.prototype.applyForce = function(f) {
-	this.force = this.force.add(f);
+	this.force = this.force.plus(f);
 	this.forceCount++;
 }
 
@@ -101,7 +101,11 @@ Walking.prototype.prepare = function() {
 	this.force = new Vector(0, 0);
 	this.forceCount = 0;
 	
+}
+
+Walking.prototype.perform = function() {
 	var desired = new Vector(0, 0);
+	
 	
 	for(var i=0; i<this.cell.behaviors.length; i++) {
 		if(this.cell.behaviors[i].prepare)
@@ -141,8 +145,5 @@ Walking.prototype.prepare = function() {
 	
 	// for legacy
 	this.cell.velocity = this.velocity;
-}
-
-Walking.prototype.perform = function() {
 	this.cell.position = this.cell.position.plus(this.velocity);
 }

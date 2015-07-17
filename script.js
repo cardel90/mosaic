@@ -117,9 +117,11 @@ Cell.prototype.draw = function(ctx) {
 	if(this.needs[0].draw)
 		this.needs[0].draw(ctx);
 	
-	for(var i=0; i<this.aspects.length; i++) {
-		if(this.aspects[i].draw)
-			this.aspects[i].draw(ctx);
+	
+	for(var i=0; i<aspectOrder.length; i++) {
+		var a = aspectOrder[i];
+		if(this.aspects[a].draw)
+			this.aspects[a].draw(ctx);
 	}
 }
 
@@ -141,7 +143,7 @@ Cell.prototype.sim = function() {
 			var p = this.aspects[a].priority();
 			if(p>max) {
 				max = p;
-				top = aspects[a];
+				top = this.aspects[a];
 			}
 		}
 	}
