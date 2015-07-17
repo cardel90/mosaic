@@ -52,6 +52,8 @@ function repaint() {
 	for(var i=cells.length-1; i>=0; i--) {
 		cells[i].draw(ctx);
 	}
+	
+	cellAside(selected);
 }
 
 function play() {
@@ -79,24 +81,30 @@ function plants() {
 	growth = v;
 }
 
+function cellAside(cell) {
+	if(!cell)
+		return;
+	$('#cell').text('');
+	$('#cell').text('Cell');
+	for(var aName in cell.aspects) {
+		var a = cell.aspects[aName];
+		var node = $('<div>');
+		node.css('background-color', a.color ? a.color : 'grey');
+		console.log(a.color);
+		node.text( (a===cell.top?'*':' ') + aName);
+		$('#cell').append(node);
+	}
+}
+
 function click(e) {
 	var x = e.pageX - $(this).offset().left,
 		y = e.pageY - $(this).offset().top,
 		v = new Vector(x, y);
-	$('#cell').text('');
 	selected = undefined;
 	for(var i=0; i<cells.length; i++) {
 		if(cells[i].position.distance(v) <= cells[i].fat) {
 			selected = cells[i];
-			$('#cell').text('Cell');
-			for(var aName in selected.aspects) {
-				var a = selected.aspects[aName];
-				var node = $('<div>');
-				node.css('background-color', a.color ? a.color : 'grey');
-				console.log(a.color);
-				node.text( (a===selected.top?'*':' ') + aName);
-				$('#cell').append(node);
-			}
+			cellAside(selected);
 			break;
 		}
 	}
