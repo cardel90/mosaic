@@ -125,7 +125,8 @@ Cell.prototype.draw = function(ctx) {
 
 Cell.prototype.sim = function() {
 
-	for(var a in this.aspects) {
+	for(var i=0; i<aspectOrder.length; i++) {
+		var a = aspectOrder[i];
 		if(this.aspects[a].prepare)
 			this.aspects[a].prepare();
 	}
@@ -134,7 +135,8 @@ Cell.prototype.sim = function() {
 	var top = undefined;
 	var max = -1;
 	
-	for(var a in this.aspects) {
+	for(var i=0; i<aspectOrder.length; i++) {
+		var a = aspectOrder[i];
 		if(this.aspects[a].priority) {
 			var p = this.aspects[a].priority();
 			if(p>max) {
@@ -145,7 +147,8 @@ Cell.prototype.sim = function() {
 	}
 	
 	// perform aspects with no priority and the top one
-	for(var a in this.aspects) {
+	for(var i=0; i<aspectOrder.length; i++) {
+		var a = aspectOrder[i];
 		var asp = this.aspects[a];
 		if(asp.perform) {
 			if(!asp.priority || asp.priority()===0 || asp===top) {

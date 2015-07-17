@@ -1,3 +1,5 @@
+// temporary, DAG by pre- and post- requirements in the future
+var aspectOrder = ['looking', 'eating', 'walking'];
 
 function loadAspect(cell, name) {
 	var aspects = {
