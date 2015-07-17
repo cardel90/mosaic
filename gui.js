@@ -1,7 +1,6 @@
 
 var speed = 20;
-var currentCanvas = 0;
-var canvases = [];
+var canvas;
 var interval;
 var selected;
 
@@ -29,7 +28,7 @@ Cell.prototype.draw = function(ctx) {
 }
 
 function repaint() {
-	var ctx = canvases[currentCanvas].getContext("2d");
+	var ctx = canvas.getContext("2d");
 	
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fillRect(0,0,width,height);
@@ -44,10 +43,6 @@ function repaint() {
 	for(var i=cells.length-1; i>=0; i--) {
 		cells[i].draw(ctx);
 	}
-	
-	canvases[currentCanvas].style.visibility = 'visible';
-	//currentCanvas = 1-currentCanvas;
-	//canvases[currentCanvas].style.visibility = 'hidden';
 }
 
 function play() {
@@ -95,8 +90,7 @@ function click(e) {
 }
 
 function initGui() {
-	canvases[0] = $('canvas').get(0);
-	canvases[1] = $('canvas').get(1);
+	canvas = $('canvas').get(0);
 	
 	$('#play').click(play);
 	$('#plants').change(plants);
