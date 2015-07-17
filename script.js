@@ -64,7 +64,7 @@ var Cell = function(pos, color, aspectTypes){
 	this.aspectList = [];
 	for(var i=0; i<this.aspectTypes.length; i++) {
 		var aspect = loadAspect(this, this.aspectTypes[i]);
-		this.aspects[this.aspectTypes[i]] = aspect;
+		this.aspects[this.aspectTypes[i].name] = aspect;
 		this.aspectList.push(aspect);
 	}
 }
@@ -97,7 +97,7 @@ Cell.prototype.nearestCells = function(condition) {
 }
 
 Cell.prototype.getAspect = function(a) {
-	return this.aspects[a];
+	return this.aspects[a.name];
 }
 
 Cell.prototype.draw = function(ctx) {
