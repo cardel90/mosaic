@@ -67,10 +67,11 @@ var Cell = function(pos, color){
 	loadAspect(this, 'herding');
 	loadAspect(this, 'fromOthers');
 	loadAspect(this, 'fromWalls');
+	loadAspect(this, 'mating');
 }
 
 Cell.prototype.makeChild = function(position) {
-	var ncell = new Cell(this.position, this.color);
+	var ncell = new Cell(this.position.plus(new Vector(10, 10)), this.color);
 	ncell.cells = cells;
 	ncell.fat = 7;
 	cells.push(ncell);

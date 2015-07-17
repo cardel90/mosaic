@@ -1,8 +1,9 @@
 // temporary, DAG by pre- and post- requirements in the future
-var aspectOrder = ['looking', 'herding', 'fromOthers', 'fromWalls', 'eating', 'grazing', 'wandering', 'walking'];
+var aspectOrder = ['looking', 'herding', 'fromOthers', 'fromWalls', 'eating', 'grazing', 'mating', 'wandering', 'walking'];
 
 function loadAspect(cell, name) {
 	var aspects = {
+		'mating': Mating,
 		'fromWalls': FromWalls,
 		'fromOthers': FromOthers,
 		'herding': Herding,
@@ -13,6 +14,53 @@ function loadAspect(cell, name) {
 		'looking': Looking
 	};
 	cell.aspects[name] = (new aspects[name](cell));
+}
+
+function Mating(cell) {
+	this.cell = cell;
+	this.horny = 0;
+}
+
+Mating.prototype.findMate = function() {
+	var tcell = this.cell;
+	var tab = this.cell.nearestCells(function(c){return c.gender != tcell.gender;});
+	if(tab.length > 0)
+		return tab[0];
+}
+
+Mating.prototype.prepare = function() {
+	if(this.cell.gender == 0)
+		return;
+	this.horny += Math.random()*0.01;
+	this.mate = this.findMate();
+}
+
+Mating.prototype.perform = function() {
+	if(this.mate !== undefined && this.mate.position.distance(this.cell.position) < 30) {
+		
+		this.cell.makeChild(this.cell.position.plus(this.mate.position).scale(0.5));
+		
+		this.horny = -1;
+	}
+		
+	var f = this.mate.position.minus(this.cell.position).normalize();
+	this.cell.getAspect('walking').applyForce(f);
+};
+
+Mating.prototype.draw = function(ctx) {
+	if(this.mate) {
+		ctx.beginPath();
+		ctx.strokeStyle = '#FF77DD';
+		ctx.moveTo(this.cell.position.x, this.cell.position.y);
+		ctx.lineTo(this.mate.position.x, this.mate.position.y);
+		ctx.stroke();
+	}
+};
+
+Mating.prototype.priority = function() {
+	if(this.cell.gender == 0)
+		return 0;
+	return this.mate === undefined ? 0 : this.horny;
 }
 
 function FromWalls(cell) {
