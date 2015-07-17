@@ -25,10 +25,14 @@ Cell.prototype.draw = function(ctx) {
 		ctx.closePath();
 	}
 	
+	// draw aspects with no priority and the top one
 	for(var i=0; i<this.aspectList.length; i++) {
 		var a = this.aspectList[i];
-		if(a.draw)
-			a.draw(ctx);
+		if(a.draw) {
+			if(!a.priority || a===this.top) {
+				a.draw(ctx);
+			}
+		}
 	}
 }
 
@@ -80,6 +84,7 @@ function click(e) {
 		y = e.pageY - $(this).offset().top,
 		v = new Vector(x, y);
 	$('#cell').text('');
+	selected = undefined;
 	for(var i=0; i<cells.length; i++) {
 		if(cells[i].position.distance(v) <= cells[i].fat) {
 			selected = cells[i];
@@ -89,7 +94,7 @@ function click(e) {
 				var node = $('<div>');
 				node.css('background-color', a.color ? a.color : 'grey');
 				console.log(a.color);
-				node.text(aName);
+				node.text( (a===selected.top?'*':' ') + aName);
 				$('#cell').append(node);
 			}
 			break;

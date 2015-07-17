@@ -105,7 +105,7 @@ Cell.prototype.sim = function() {
 	}
 
 	// find top priority
-	var top = undefined;
+	this.top = undefined;
 	var max = -1;
 	
 	for(var i=0; i<this.aspectList.length; i++) {
@@ -114,7 +114,7 @@ Cell.prototype.sim = function() {
 			var p = a.priority();
 			if(p>max) {
 				max = p;
-				top = a;
+				this.top = a;
 			}
 		}
 	}
@@ -123,7 +123,7 @@ Cell.prototype.sim = function() {
 	for(var i=0; i<this.aspectList.length; i++) {
 		var a = this.aspectList[i];
 		if(a.perform) {
-			if(!a.priority || a===top) {
+			if(!a.priority || a===this.top) {
 				a.perform();
 			}
 		}
