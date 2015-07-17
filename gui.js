@@ -82,9 +82,9 @@ function plants() {
 }
 
 function cellAside(cell) {
+	$('#cell').text('');
 	if(!cell)
 		return;
-	$('#cell').text('');
 	$('#cell').text('Cell');
 	for(var aName in cell.aspects) {
 		var a = cell.aspects[aName];

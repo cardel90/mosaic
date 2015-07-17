@@ -22,7 +22,7 @@ Water.prototype.draw = function(ctx) {
 
 function makePredator(position) {
 	var ncell = new Cell(position, 'red', 
-		[Walking, Eating, Hunting, Wandering]);
+		[Walking, Eating, Hunting, FromWalls, Wandering]);
 	ncell.cells = cells;
 	cells.push(ncell);
 }
@@ -30,7 +30,7 @@ function makePredator(position) {
 function makeHerbivore(position) {
 	var color = colors[Math.floor(Math.random()*colors.length)];
 	var ncell = new Cell(Vector.random(25, 25, width-50, height-50), color, 
-		[Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering]);
+		[RunningAway, Mating, Walking, Herding, FromOthers, FromWalls, Eating, Grazing, Wandering]);
 	ncell.cells = cells;
 	cells.push(ncell);
 }
@@ -164,8 +164,8 @@ $(function(){
 	for(var i=0; i<30; i++) {
 		makeHerbivore(Vector.random(25, 25, width-50, height-50));
 	}
-//	makePredator(Vector.random(25, 25, width-50, height-50));
-//	makePredator(Vector.random(25, 25, width-50, height-50));
+	makePredator(Vector.random(25, 25, width-50, height-50));
+	makePredator(Vector.random(25, 25, width-50, height-50));
 	
 	initGui();
 	

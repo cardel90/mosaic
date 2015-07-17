@@ -122,7 +122,7 @@ RunningAway.prototype.draw = function(ctx) {
 };
 
 RunningAway.prototype.priority = function() {
-	return this.hunter === undefined ? 0 : 10;
+	return this.hunter === undefined ? 0 : 100;
 }
 
 function Hunting(cell) {
