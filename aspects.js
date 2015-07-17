@@ -89,9 +89,18 @@ function Walking(cell) {
 	this.cell = cell;
 	this.velocity = new Vector(0, 0);
 	this.force = new Vector(0, 0);
+	this.forceCount = 0;
+}
+
+Walking.prototype.applyForce = function(f) {
+	this.force = this.force.add(f);
+	this.forceCount++;
 }
 
 Walking.prototype.prepare = function() {
+	this.force = new Vector(0, 0);
+	this.forceCount = 0;
+	
 	var desired = new Vector(0, 0);
 	
 	for(var i=0; i<this.cell.behaviors.length; i++) {
@@ -119,6 +128,9 @@ Walking.prototype.prepare = function() {
 		c++;
 	}
 	desired = desired.plus(v.scale(2/c));
+	
+	if(this.forceCount > 0)
+		desired = desired.plus(this.force.scale(2/this.forceCount));
 	
 	desired = desired.capLength(2);
 	
