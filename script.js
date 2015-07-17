@@ -235,6 +235,13 @@ function click(e) {
 	for(var i=0; i<cells.length; i++) {
 		if(cells[i].position.distance(v) <= cells[i].fat) {
 			selected = cells[i];
+			$('#cell').text('Cell');
+			for(var a in selected.aspects) {
+				var node = $('<div>');
+				node.text(a);
+				$('#cell').append(node);
+			}
+			break;
 		}
 	}
 }
