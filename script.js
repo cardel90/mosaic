@@ -25,7 +25,7 @@ Water.prototype.draw = function(ctx) {
 }
 
 function makePredator(position) {
-	var ncell = new Cell(position, 'red', []);
+	var ncell = new Cell(position, 'red', ['looking', 'fromWalls', 'eating', 'hunting', 'mating', 'wandering', 'walking']);
 	ncell.cells = cells;
 	ncell.fat = 10;
 	cells.push(ncell);
@@ -233,8 +233,8 @@ $(function(){
 	for(var i=0; i<30; i++) {
 		makeHerbivore(Vector.random(25, 25, width-50, height-50));
 	}
-	//makePredator(Vector.random(25, 25, width-50, height-50));
-	//makePredator(Vector.random(25, 25, width-50, height-50));
+	makePredator(Vector.random(25, 25, width-50, height-50));
+	makePredator(Vector.random(25, 25, width-50, height-50));
 	
 	$('#play').click(play);
 	$('#plants').change(plants);

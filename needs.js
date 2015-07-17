@@ -1,45 +1,4 @@
 
-function Hunting(cell) {
-	this.cell = cell;
-}
-
-Hunting.prototype.findPrey = function() {
-	var tcell = this.cell;
-	var tab = this.cell.nearestCells(function(c){return c.color != tcell.color;});
-	if(tab.length > 0)
-		return tab[0];
-}
-
-Hunting.prototype.prepare = function() {
-	this.prey = this.findPrey();
-}
-
-Hunting.prototype.perform = function() {
-	if(this.prey === undefined)
-		return new Vector(0, 0);
-	var d = this.prey.position.distance(this.cell.position) - this.prey.fat - this.cell.fat;
-	if(d < 5) {
-		this.cell.getAspect('eating').feed(this.prey.fat);
-		// should this be in eating?
-		this.prey.getAspect('eating').fat = 0;
-		return new Vector(0, 0);
-	}
-		
-	return this.prey.position.minus(this.cell.position).normalize();
-};
-
-Hunting.prototype.draw = function(ctx) {
-	ctx.beginPath();
-	ctx.strokeStyle = '#FF0000';
-	ctx.moveTo(this.cell.position.x, this.cell.position.y);
-	ctx.lineTo(this.prey.position.x, this.prey.position.y);
-	ctx.stroke();
-};
-
-Hunting.prototype.priority = function() {
-	return this.prey === undefined ? 0 : this.cell.getAspect('eating').hunger;
-}
-
 /*
 // return COST (less -> better)
 Feeding.prototype.judgeFood = function(f) {

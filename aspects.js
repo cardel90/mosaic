@@ -1,8 +1,9 @@
 // temporary, DAG by pre- and post- requirements in the future
-var aspectOrder = ['looking', 'herding', 'fromOthers', 'fromWalls', 'eating', 'grazing', 'mating', 'wandering', 'walking'];
+var aspectOrder = ['looking', 'herding', 'fromOthers', 'fromWalls', 'eating', 'hunting', 'grazing', 'mating', 'wandering', 'walking'];
 
 function loadAspect(cell, name) {
 	var aspects = {
+		'hunting': Hunting,
 		'mating': Mating,
 		'fromWalls': FromWalls,
 		'fromOthers': FromOthers,
@@ -14,6 +15,50 @@ function loadAspect(cell, name) {
 		'looking': Looking
 	};
 	return new aspects[name](cell);
+}
+
+function Hunting(cell) {
+	this.cell = cell;
+}
+
+Hunting.prototype.findPrey = function() {
+	var tcell = this.cell;
+	var tab = this.cell.nearestCells(function(c){return c.color != tcell.color;});
+	if(tab.length > 0)
+		return tab[0];
+}
+
+Hunting.prototype.prepare = function() {
+	this.prey = this.findPrey();
+}
+
+Hunting.prototype.perform = function() {
+	if(this.prey === undefined)
+		return;
+	var d = this.prey.position.distance(this.cell.position) - this.prey.fat - this.cell.fat;
+	if(d < 5) {
+		this.cell.getAspect('eating').feed(this.prey.fat);
+		// should this be in eating?
+		this.prey.getAspect('eating').fat = 0;
+		return;
+	}
+		
+	var f = this.prey.position.minus(this.cell.position).normalize().scale(2);
+	this.cell.getAspect('walking').applyForce(f);
+};
+
+Hunting.prototype.draw = function(ctx) {
+	if(this.prey) {
+		ctx.beginPath();
+		ctx.strokeStyle = '#FF0000';
+		ctx.moveTo(this.cell.position.x, this.cell.position.y);
+		ctx.lineTo(this.prey.position.x, this.prey.position.y);
+		ctx.stroke();
+	}
+};
+
+Hunting.prototype.priority = function() {
+	return this.prey === undefined ? 0 : this.cell.getAspect('eating').hunger;
 }
 
 function Mating(cell) {
@@ -350,8 +395,6 @@ Walking.prototype.perform = function() {
 	desired = desired.capLength(2);
 	
 	desired = desired.scale(0.6*(20-this.cell.fat)/20 + 0.7);
-	if(this.cell.color === 'red')
-		desired = desired.scale(2);
 	this.velocity = this.velocity.plus(desired.minus(this.velocity).scale(0.1));
 	
 	// for legacy
