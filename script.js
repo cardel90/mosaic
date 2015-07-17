@@ -65,6 +65,7 @@ var Cell = function(pos, color){
 	loadAspect(this, 'wandering');
 	loadAspect(this, 'grazing');
 	loadAspect(this, 'herding');
+	loadAspect(this, 'fromOthers');
 }
 
 Cell.prototype.makeChild = function(position) {

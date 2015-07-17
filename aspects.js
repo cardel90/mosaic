@@ -1,8 +1,9 @@
 // temporary, DAG by pre- and post- requirements in the future
-var aspectOrder = ['looking', 'herding', 'eating', 'grazing', 'wandering', 'walking'];
+var aspectOrder = ['looking', 'herding', 'fromOthers', 'eating', 'grazing', 'wandering', 'walking'];
 
 function loadAspect(cell, name) {
 	var aspects = {
+		'fromOthers': FromOthers,
 		'herding': Herding,
 		'grazing': Grazing,
 		'wandering': Wandering,
@@ -11,6 +12,50 @@ function loadAspect(cell, name) {
 		'looking': Looking
 	};
 	cell.aspects[name] = (new aspects[name](cell));
+}
+
+function FromOthers(cell) {
+	this.cell = cell;
+	this.vector = new Vector(0, 0);
+	this.tab = [];
+}
+
+FromOthers.modifiedDistance = function(from, to) {
+	return from.distance(to)-1.1*to.fat-from.fat - (to.color === 'red' ? 5 : 0);
+}
+
+FromOthers.prototype.prepare = function() {
+	var x = 0;
+	var y = 0;
+	
+	var tcell = this.cell;
+	this.tab = this.cell.nearestCells(function(c){
+		return c!==tcell && FromOthers.modifiedDistance(tcell, c)<15;
+	});
+	
+	for(var i=0; i<this.tab.length; i++) {
+		var c = this.tab[i];
+		var d = FromOthers.modifiedDistance(tcell, c);
+		var v = this.cell.vectorTo(c);
+		x -= 1*v.x/(d*d);
+		y -= 1*v.y/(d*d);
+	}
+	
+	this.vector = new Vector(x, y);
+}
+
+FromOthers.prototype.perform = function() {
+	this.cell.getAspect('walking').applyForce(this.vector);
+};
+
+FromOthers.prototype.draw = function(ctx) {
+	return;
+	ctx.strokeStyle = '#FFCCCC';
+	for(var i=0; i<this.tab.length; i++) {
+		ctx.moveTo(this.cell.position.x, this.cell.position.y);
+		ctx.lineTo(this.tab[i].position.x, this.tab[i].position.y);
+		ctx.stroke();
+	}
 }
 
 function Herding(cell) {
