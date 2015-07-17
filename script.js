@@ -63,6 +63,7 @@ var Cell = function(pos, color){
 	loadAspect(this, 'walking');
 	loadAspect(this, 'eating');
 	loadAspect(this, 'wandering');
+	loadAspect(this, 'grazing');
 }
 
 Cell.prototype.makeChild = function(position) {

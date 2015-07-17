@@ -1,14 +1,75 @@
 // temporary, DAG by pre- and post- requirements in the future
-var aspectOrder = ['looking', 'eating', 'wandering', 'walking'];
+var aspectOrder = ['looking', 'eating', 'grazing', 'wandering', 'walking'];
 
 function loadAspect(cell, name) {
 	var aspects = {
+		'grazing': Grazing,
 		'wandering': Wandering,
 		'eating': Eating,
 		'walking': Walking,
 		'looking': Looking
 	};
 	cell.aspects[name] = (new aspects[name](cell));
+}
+
+function Grazing(cell) {
+	this.cell = cell;
+}
+
+Grazing.prototype.prepare = function() {
+	this.target = this.findFood();
+}
+
+// return COST (less -> better)
+Grazing.prototype.judgeFood = function(f) {
+	var d = this.cell.position.distance(f.position) - (f.amount + this.cell.fat + 5);
+	if(d<0)
+		d = -100;
+	return (d - 10*f.amount);
+}
+
+Grazing.prototype.findFood = function() {
+	if(food.length == 0)
+		return undefined;
+	var best = food[0];
+	var value = this.judgeFood(food[0]);
+	for(var i=0; i<food.length; i++) {
+		var f = food[i];
+		var j = this.judgeFood(f);
+		if(j<value) {
+			best = f;
+			value = j;
+		}
+	}
+	return best;
+}
+
+Grazing.prototype.perform = function() {
+	if(this.target === undefined)
+		return;
+	var d = this.target.position.distance(this.cell.position) - this.target.amount - this.cell.fat;
+	if(d < 5) {		
+		this.target.amount -= 0.1;
+		this.cell.getAspect('eating').feed(0.1);
+	}
+	if(d>0) {
+		var f = this.target.position.minus(this.cell.position).normalize();
+		this.cell.getAspect('walking').applyForce(f);
+	}
+};
+
+Grazing.prototype.draw = function(ctx) {
+	ctx.beginPath();
+	ctx.strokeStyle = 'green';
+	if(this.target !== undefined) {
+		ctx.moveTo(this.cell.position.x,this.cell.position.y);
+		ctx.lineTo(this.target.position.x, this.target.position.y);
+		ctx.stroke();
+	}
+}
+
+Grazing.prototype.priority = function() {
+	return this.target === undefined ? 0 : this.cell.getAspect('eating').hunger;
 }
 
 function Wandering(cell) {
