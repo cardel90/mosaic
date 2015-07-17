@@ -25,8 +25,7 @@ Wandering.prototype.perform = function() {
 		this.target = Vector.random(25, 25, width-50, height-50);
 	var desired = this.target.minus(this.cell.position).normalize();
 	this.speed = this.speed.plus(desired.minus(this.speed).normalize().scale(0.01));
-	//this.cell.getAspect('walking').applyForce(this.speed.capLength(0.5));
-	this.cell.getAspect('walking').applyForce(this.target.minus(this.cell.position).scale(2));
+	this.cell.getAspect('walking').applyForce(this.speed.capLength(0.5));
 };
 
 Wandering.prototype.draw = function(ctx) {
@@ -81,6 +80,7 @@ function canvas_arrow(context, fromx, fromy, tox, toy){
 }
 
 Looking.prototype.draw = function(ctx) {
+	return;
 	ctx.beginPath();
 	ctx.strokeStyle = 'black';
 	/*
@@ -136,33 +136,6 @@ Walking.prototype.prepare = function() {
 
 Walking.prototype.perform = function() {
 	var desired = new Vector(0, 0);
-	
-	
-	for(var i=0; i<this.cell.behaviors.length; i++) {
-		if(this.cell.behaviors[i].prepare)
-			this.cell.behaviors[i].prepare();
-	}
-	
-	for(var i=0; i<this.cell.needs.length; i++) {
-		this.cell.needs[i].prepare();
-	}
-	
-	var compare = function(a,b){
-		return b.priority() - a.priority();
-	}
-	// perform biggest need
-	this.cell.needs.sort(compare);
-	desired = desired.plus(this.cell.needs[0].perform());
-	
-	// perform average of all behaviors
-	var c = 0;
-	var v = new Vector(0, 0);
-	for(var i=0; i<this.cell.behaviors.length; i++) {
-		var vect = this.cell.behaviors[i].perform();
-		v = v.plus(vect);
-		c++;
-	}
-	desired = desired.plus(v.scale(2/c));
 	
 	if(this.forceCount > 0)
 		desired = desired.plus(this.force.scale(2/this.forceCount));
