@@ -4,12 +4,7 @@ var cells = [];
 var colors = ['yellow', 'blue'];
 var food = [];
 var growth = 0.5;
-var speed = 20;
 var waters = [];
-var currentCanvas = 0;
-var canvases = [];
-var interval;
-var selected;
 
 function Water(position, radius) {
 	this.position = position;
@@ -97,29 +92,6 @@ Cell.prototype.getAspect = function(name) {
 	return this.aspects[name];
 }
 
-Cell.prototype.draw = function(ctx) {
-	ctx.strokeStyle = 'black';
-	ctx.fillStyle = this.color;
-	ctx.beginPath();
-	ctx.arc(this.position.x, this.position.y, this.fat, 0, 2*Math.PI);
-	ctx.stroke();
-	ctx.fill();
-	ctx.closePath();
-
-	if(this === selected) {
-		ctx.beginPath();
-		ctx.arc(this.position.x, this.position.y, this.fat+5, 0, 2*Math.PI);
-		ctx.stroke();
-		ctx.closePath();
-	}
-	
-	for(var i=0; i<this.aspectList.length; i++) {
-		var a = this.aspectList[i];
-		if(a.draw)
-			a.draw(ctx);
-	}
-}
-
 Cell.prototype.sim = function() {
 
 	for(var i=0; i<this.aspectList.length; i++) {
@@ -181,95 +153,18 @@ function update() {
 	repaint();
 }
 
-function repaint() {
-	var ctx = canvases[currentCanvas].getContext("2d");
-	
-	ctx.fillStyle = "#FFFFFF";
-	ctx.fillRect(0,0,width,height);
-	
-	for(var i=waters.length-1; i>=0; i--) {
-		waters[i].draw(ctx);
-	}
-	
-	for(var i=food.length-1; i>=0; i--) {
-		food[i].draw(ctx);
-	}
-	for(var i=cells.length-1; i>=0; i--) {
-		cells[i].draw(ctx);
-	}
-	
-	canvases[currentCanvas].style.visibility = 'visible';
-	//currentCanvas = 1-currentCanvas;
-	//canvases[currentCanvas].style.visibility = 'hidden';
-}
-
-function play() {
-	if(interval === undefined) {
-		$('#play').text('Stop');
-		interval = setInterval(update, speed);
-	} else {
-		clearInterval(interval);
-		interval = undefined;
-		$('#play').text('Play');
-	}
-}
-
-function changeSpeed() {
-	var v = $('#speed').val();
-	speed = 100-v;
-	if(interval !== undefined) {
-		play();
-		play();
-	}
-}
-
-function plants() {
-	var v = $('#plants').val();
-	growth = v;
-}
-
-function click(e) {
-	var x = e.pageX - $(this).offset().left,
-		y = e.pageY - $(this).offset().top,
-		v = new Vector(x, y);
-	console.log(v);
-	for(var i=0; i<cells.length; i++) {
-		if(cells[i].position.distance(v) <= cells[i].fat) {
-			selected = cells[i];
-			$('#cell').text('Cell');
-			for(var a in selected.aspects) {
-				var node = $('<div>');
-				node.text(a);
-				$('#cell').append(node);
-			}
-			break;
-		}
-	}
-}
-
 $(function(){
 	width = $('canvas').get(0).width;
 	height = $('canvas').get(0).height;
-	canvases[0] = $('canvas').get(0);
-	canvases[1] = $('canvas').get(1);
-	
-	// waters[0] = new Water(new Vector(500, 300), 100);
-	
+
 	for(var i=0; i<30; i++) {
 		makeHerbivore(Vector.random(25, 25, width-50, height-50));
 	}
 	makePredator(Vector.random(25, 25, width-50, height-50));
 	makePredator(Vector.random(25, 25, width-50, height-50));
 	
-	$('#play').click(play);
-	$('#plants').change(plants);
-	$('#speed').change(changeSpeed);
-	$('#canvas1').click(click);
-	$('#canvas2').click(click);
-
-	changeSpeed();
-	plants();
-	update();
+	initGui();
 	
-//	play();
+	update();
+	play();
 })
