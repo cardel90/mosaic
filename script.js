@@ -32,7 +32,8 @@ function makePredator(position) {
 
 function makeHerbivore(position) {
 	var color = colors[Math.floor(Math.random()*colors.length)];
-	var ncell = new Cell(Vector.random(25, 25, width-50, height-50), color, ['runningAway', 'looking', 'herding', 'fromOthers', 'fromWalls', 'fromWater', 'eating', 'grazing', 'mating', 'wandering', 'walking']);
+	var ncell = new Cell(Vector.random(25, 25, width-50, height-50), color, 
+		[Herding, FromOthers, Eating, Grazing, Wandering, Walking]);
 	ncell.cells = cells;
 	cells.push(ncell);
 }
@@ -51,20 +52,18 @@ Food.prototype.draw = function(ctx) {
 	ctx.fill();
 }
 
-var Cell = function(pos, color, aspectNames){
+var Cell = function(pos, color, aspects){
 	this.position = pos;
 	this.velocity = new Vector(0, 0);
 	this.color = color;
 	this.gender = Math.random()<0.1 ? 1 : 0;
+	this.fat = 10;
 	this.aspects = {};
 	this.aspectList = [];
-	this.aspectNames = aspectNames;
-	for(var i=0; i<aspectOrder.length; i++) {
-		if(aspectNames.indexOf(aspectOrder[i]) == -1)
-			continue;
-		var aspect = loadAspect(this, aspectOrder[i]);
-		this.aspects[aspectOrder[i]] = aspect;
-		this.aspectList.push(aspect);		
+	for(var i=0; i<aspects.length; i++) {
+		var aspect = loadAspect(this, aspects[i]);
+		this.aspects[aspects[i]] = aspect;
+		this.aspectList.push(aspect);
 	}
 }
 
@@ -95,8 +94,8 @@ Cell.prototype.nearestCells = function(condition) {
 	return result;
 }
 
-Cell.prototype.getAspect = function(name) {
-	return this.aspects[name];
+Cell.prototype.getAspect = function(a) {
+	return this.aspects[a];
 }
 
 Cell.prototype.draw = function(ctx) {
@@ -234,8 +233,8 @@ $(function(){
 	for(var i=0; i<30; i++) {
 		makeHerbivore(Vector.random(25, 25, width-50, height-50));
 	}
-	makePredator(Vector.random(25, 25, width-50, height-50));
-	makePredator(Vector.random(25, 25, width-50, height-50));
+//	makePredator(Vector.random(25, 25, width-50, height-50));
+//	makePredator(Vector.random(25, 25, width-50, height-50));
 	
 	$('#play').click(play);
 	$('#plants').change(plants);
