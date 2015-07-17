@@ -33,7 +33,7 @@ function makePredator(position) {
 function makeHerbivore(position) {
 	var color = colors[Math.floor(Math.random()*colors.length)];
 	var ncell = new Cell(Vector.random(25, 25, width-50, height-50), color, 
-		[Herding, FromOthers, Eating, Grazing, Wandering, Walking]);
+		[Walking, Herding, FromOthers, Eating, Grazing, Wandering]);
 	ncell.cells = cells;
 	cells.push(ncell);
 }
@@ -58,6 +58,7 @@ var Cell = function(pos, color, aspects){
 	this.color = color;
 	this.gender = Math.random()<0.1 ? 1 : 0;
 	this.fat = 10;
+	aspects = sortAspects(aspects);
 	this.aspects = {};
 	this.aspectList = [];
 	for(var i=0; i<aspects.length; i++) {

@@ -15,6 +15,56 @@ var aspects = {
 // temporary, DAG by pre- and post- requirements in the future
 var aspectOrder = ['looking', 'herding', 'fromOthers', 'fromWalls', 'fromWater', 'eating', 'runningAway', 'hunting', 'grazing', 'mating', 'wandering', 'walking'];
 
+function topSort(tab) {
+	var free = [];
+	for(var i in tab) {
+		if(tab[i].input == 0)
+			free.push(tab[i]);
+	}
+	var result = [];
+	while(free.length > 0) {
+		var node = free[0];
+		result.push(node);
+		free.splice(0, 1);
+		for(var i in node.edges) {
+			var s = tab[node.edges[i]];
+			s.input--;
+			if(s.input == 0)
+				free.push(s);
+		}
+	}
+	return result;
+}
+
+// fails if pre- or post- contains other aspects
+function sortAspects(aspects) {
+	var tab = [];
+	for(var i=0; i<aspects.length; i++) {
+		var node = {input:0, edges:[], aspect:aspects[i]};
+		tab[aspects[i]] = node;
+	}
+	for(var i=0; i<aspects.length; i++) {
+		var a = aspects[i];
+		for(var j in a.pre) {
+			var s = a.pre[j];
+			tab[a].input++;
+			tab[s].edges.push(a);
+		}
+		for(var j in a.post) {
+			var s = a.post[j];
+			tab[s].input++;
+			tab[a].edges.push(s);
+		}
+	}
+	var sorted = topSort(tab);
+	var result = [];
+	for(var i in sorted)
+		result.push(sorted[i].aspect);
+	return result;
+}
+
+Walking.pre = [Wandering, Grazing, FromOthers, Herding];
+
 function loadAspect(cell, aspect) {
 	return new aspect(cell);
 }
