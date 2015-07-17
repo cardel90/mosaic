@@ -335,7 +335,7 @@ Wandering.prototype.priority = function() {
 
 function Eating(cell) {
 	this.cell = cell;
-	this.fat = 15;
+	this.fat = 10;
 	this.hunger = 0;
 }
 

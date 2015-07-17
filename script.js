@@ -27,7 +27,6 @@ Water.prototype.draw = function(ctx) {
 function makePredator(position) {
 	var ncell = new Cell(position, 'red', ['looking', 'fromWalls', 'eating', 'hunting', 'mating', 'wandering', 'walking']);
 	ncell.cells = cells;
-	ncell.fat = 10;
 	cells.push(ncell);
 }
 
@@ -55,7 +54,6 @@ Food.prototype.draw = function(ctx) {
 var Cell = function(pos, color, aspectNames){
 	this.position = pos;
 	this.velocity = new Vector(0, 0);
-	this.fat = 15;
 	this.color = color;
 	this.gender = Math.random()<0.1 ? 1 : 0;
 	this.aspects = {};
