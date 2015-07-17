@@ -31,7 +31,7 @@ FromWater.prototype.prepare = function() {
 	for(var i=0; i<waters.length; i++) {
 		var w = waters[i];
 		var d = w.position.distance(p) - w.radius;
-		if(d < 2*this.cell.fat) {
+		if(d < 2*this.cell.getSize()) {
 			v = v.plus(p.minus(w.position).scale(1/w.radius).scale(1/(d*d)));
 		}
 	}
@@ -101,9 +101,9 @@ Hunting.prototype.prepare = function() {
 Hunting.prototype.perform = function() {
 	if(this.prey === undefined)
 		return;
-	var d = this.prey.position.distance(this.cell.position) - this.prey.fat - this.cell.fat;
+	var d = this.prey.position.distance(this.cell.position) - this.prey.getSize() - this.cell.getSize();
 	if(d < 5) {
-		this.cell.getAspect('eating').feed(this.prey.fat);
+		this.cell.getAspect('eating').feed(this.prey.getAspect('eating').fat);
 		// should this be in eating?
 		this.prey.getAspect('eating').fat = 0;
 		return;
@@ -205,7 +205,7 @@ function FromOthers(cell) {
 }
 
 FromOthers.modifiedDistance = function(from, to) {
-	return from.distance(to)-1.1*to.fat-from.fat - (to.color === 'red' ? 5 : 0);
+	return from.distance(to)-1.1*to.getSize()-from.getSize() - (to.color === 'red' ? 5 : 0);
 }
 
 FromOthers.prototype.prepare = function() {
@@ -279,7 +279,7 @@ Grazing.prototype.prepare = function() {
 
 // return COST (less -> better)
 Grazing.prototype.judgeFood = function(f) {
-	var d = this.cell.position.distance(f.position) - (f.amount + this.cell.fat + 5);
+	var d = this.cell.position.distance(f.position) - (f.amount + this.cell.getSize() + 5);
 	if(d<0)
 		d = -100;
 	return (d - 10*f.amount);
@@ -304,7 +304,7 @@ Grazing.prototype.findFood = function() {
 Grazing.prototype.perform = function() {
 	if(this.target === undefined)
 		return;
-	var d = this.target.position.distance(this.cell.position) - this.target.amount - this.cell.fat;
+	var d = this.target.position.distance(this.cell.position) - this.target.amount - this.cell.getSize();
 	if(d < 5) {		
 		this.target.amount -= 0.1;
 		this.cell.getAspect('eating').feed(0.1);
@@ -460,7 +460,7 @@ Walking.prototype.perform = function() {
 	
 	desired = desired.capLength(2);
 	
-	desired = desired.scale(0.6*(20-this.cell.fat)/20 + 0.7);
+	desired = desired.scale(0.6*(20-this.cell.getSize())/20 + 0.7);
 	this.velocity = this.velocity.plus(desired.minus(this.velocity).scale(0.1));
 	
 	// for legacy

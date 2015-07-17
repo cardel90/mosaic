@@ -68,10 +68,13 @@ var Cell = function(pos, color, aspectNames){
 	}
 }
 
+Cell.prototype.getSize = function() {
+	return this.fat;
+}
+
 Cell.prototype.makeChild = function(position) {
 	var ncell = new Cell(this.position.plus(new Vector(20, 20)), this.color, this.aspectNames);
 	ncell.cells = cells;
-	ncell.fat = 7;
 	cells.push(ncell);
 	ncell.sim();
 }
@@ -100,7 +103,7 @@ Cell.prototype.draw = function(ctx) {
 	ctx.strokeStyle = 'black';
 	ctx.fillStyle = this.color;
 	ctx.beginPath();
-	ctx.arc(this.position.x, this.position.y, this.fat, 0, 2*Math.PI);
+	ctx.arc(this.position.x, this.position.y, this.getSize(), 0, 2*Math.PI);
 	ctx.stroke();
 	ctx.fill();
 	ctx.closePath();
