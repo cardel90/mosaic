@@ -151,7 +151,7 @@ Grazing.prototype.perform = function() {
 		this.cell.getAspect('eating').feed(0.1);
 	}
 	if(d>0) {
-		var f = this.target.position.minus(this.cell.position).normalize();
+		var f = this.target.position.minus(this.cell.position).normalize().scale(1.5);
 		this.cell.getAspect('walking').applyForce(f);
 	}
 };
