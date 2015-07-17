@@ -1,8 +1,9 @@
 // temporary, DAG by pre- and post- requirements in the future
-var aspectOrder = ['looking', 'eating', 'grazing', 'wandering', 'walking'];
+var aspectOrder = ['looking', 'herding', 'eating', 'grazing', 'wandering', 'walking'];
 
 function loadAspect(cell, name) {
 	var aspects = {
+		'herding': Herding,
 		'grazing': Grazing,
 		'wandering': Wandering,
 		'eating': Eating,
@@ -11,6 +12,33 @@ function loadAspect(cell, name) {
 	};
 	cell.aspects[name] = (new aspects[name](cell));
 }
+
+function Herding(cell) {
+	this.cell = cell;
+	this.vector = new Vector(0, 0);
+}
+
+Herding.prototype.prepare = function() {
+	var vel = new Vector(0, 0);
+	var loc = new Vector(0, 0);
+	
+	var tcell = this.cell;
+	var tab = this.cell.nearestCells(function(c){return c.color===tcell.color && c.distance(tcell)<100;});
+	var n = tab.length;
+	for(var i=0; i<n; i++) {
+		var c = tab[i];
+		vel = vel.plus(c.velocity);
+		loc = loc.plus(c.position);
+	}
+	
+	var toLoc = loc.scale(1/n).minus(tcell.position).normalize();
+	
+	this.vector = vel.scale(1/n).plus(toLoc);
+};
+
+Herding.prototype.perform = function() {
+	this.cell.getAspect('walking').applyForce(this.vector);
+};
 
 function Grazing(cell) {
 	this.cell = cell;
