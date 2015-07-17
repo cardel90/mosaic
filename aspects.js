@@ -1,20 +1,3 @@
-var aspects = {
-	'fromWater': FromWater,
-	'runningAway': RunningAway,
-	'hunting': Hunting,
-	'mating': Mating,
-	'fromWalls': FromWalls,
-	'fromOthers': FromOthers,
-	'herding': Herding,
-	'grazing': Grazing,
-	'wandering': Wandering,
-	'eating': Eating,
-	'walking': Walking,
-	'looking': Looking
-};
-// temporary, DAG by pre- and post- requirements in the future
-var aspectOrder = ['looking', 'herding', 'fromOthers', 'fromWalls', 'fromWater', 'eating', 'runningAway', 'hunting', 'grazing', 'mating', 'wandering', 'walking'];
-
 function topSort(tab) {
 	var free = [];
 	for(var i in tab) {
@@ -36,7 +19,6 @@ function topSort(tab) {
 	return result;
 }
 
-// fails if pre- or post- contains other aspects
 function sortAspects(aspects) {
 	var tab = [];
 	for(var i=0; i<aspects.length; i++) {
@@ -63,7 +45,17 @@ function sortAspects(aspects) {
 	return result;
 }
 
-Walking.pre = [Wandering, Grazing, FromOthers, Herding];
+Wandering.post = [Walking];
+RunningAway.post = [Walking];
+Grazing.post = [Walking];
+Grazing.pre = [Eating];
+FromOthers.post = [Walking];
+FromWalls.post = [Walking];
+FromWater.post = [Walking];
+Herding.post = [Walking];
+Mating.post = [Walking];
+Hunting.pre = [Eating];
+Hunting.post = [Walking];
 
 function loadAspect(cell, aspect) {
 	return new aspect(cell);
