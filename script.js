@@ -25,14 +25,14 @@ Water.prototype.draw = function(ctx) {
 }
 
 function makePredator(position) {
-	var ncell = new Cell(position, 'red', ['looking', 'fromWalls', 'eating', 'hunting', 'mating', 'wandering', 'walking']);
+	var ncell = new Cell(position, 'red', ['looking', 'fromWalls', 'fromWater', 'eating', 'hunting', 'mating', 'wandering', 'walking']);
 	ncell.cells = cells;
 	cells.push(ncell);
 }
 
 function makeHerbivore(position) {
 	var color = colors[Math.floor(Math.random()*colors.length)];
-	var ncell = new Cell(Vector.random(25, 25, width-50, height-50), color, ['runningAway', 'looking', 'herding', 'fromOthers', 'fromWalls', 'eating', 'grazing', 'mating', 'wandering', 'walking']);
+	var ncell = new Cell(Vector.random(25, 25, width-50, height-50), color, ['runningAway', 'looking', 'herding', 'fromOthers', 'fromWalls', 'fromWater', 'eating', 'grazing', 'mating', 'wandering', 'walking']);
 	ncell.cells = cells;
 	cells.push(ncell);
 }
