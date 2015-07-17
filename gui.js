@@ -4,6 +4,11 @@ var canvas;
 var interval;
 var selected;
 
+Mating.prototype.color = 'pink';
+Hunting.prototype.color = 'red';
+RunningAway.prototype.color = 'yellow';
+Grazing.prototype.color = 'green';
+
 Cell.prototype.draw = function(ctx) {
 	ctx.strokeStyle = 'black';
 	ctx.fillStyle = this.color;
@@ -74,14 +79,17 @@ function click(e) {
 	var x = e.pageX - $(this).offset().left,
 		y = e.pageY - $(this).offset().top,
 		v = new Vector(x, y);
-	console.log(v);
+	$('#cell').text('');
 	for(var i=0; i<cells.length; i++) {
 		if(cells[i].position.distance(v) <= cells[i].fat) {
 			selected = cells[i];
 			$('#cell').text('Cell');
-			for(var a in selected.aspects) {
+			for(var aName in selected.aspects) {
+				var a = selected.aspects[aName];
 				var node = $('<div>');
-				node.text(a);
+				node.css('background-color', a.color ? a.color : 'grey');
+				console.log(a.color);
+				node.text(aName);
 				$('#cell').append(node);
 			}
 			break;
