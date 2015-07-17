@@ -137,7 +137,7 @@ Cell.prototype.sim = function() {
 		var a = aspectOrder[i];
 		var asp = this.aspects[a];
 		if(asp.perform) {
-			if(!asp.priority || asp.priority()===0 || asp===top) {
+			if(!asp.priority || asp===top) {
 				asp.perform();
 			}
 		}
