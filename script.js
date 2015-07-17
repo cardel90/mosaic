@@ -60,6 +60,7 @@ var Cell = function(pos, color, aspectNames){
 	this.gender = Math.random()<0.1 ? 1 : 0;
 	this.aspects = {};
 	this.aspectList = [];
+	this.aspectNames = aspectNames;
 	for(var i=0; i<aspectOrder.length; i++) {
 		if(aspectNames.indexOf(aspectOrder[i]) == -1)
 			continue;
@@ -70,7 +71,7 @@ var Cell = function(pos, color, aspectNames){
 }
 
 Cell.prototype.makeChild = function(position) {
-	var ncell = new Cell(this.position.plus(new Vector(10, 10)), this.color, ['looking', 'herding', 'fromOthers', 'fromWalls', 'eating', 'grazing', 'mating', 'wandering', 'walking']);
+	var ncell = new Cell(this.position.plus(new Vector(20, 20)), this.color, this.aspectNames);
 	ncell.cells = cells;
 	ncell.fat = 7;
 	cells.push(ncell);
