@@ -1,8 +1,9 @@
 // temporary, DAG by pre- and post- requirements in the future
-var aspectOrder = ['looking', 'herding', 'fromOthers', 'fromWalls', 'eating', 'hunting', 'grazing', 'mating', 'wandering', 'walking'];
+var aspectOrder = ['looking', 'herding', 'fromOthers', 'fromWalls', 'eating', 'runningAway', 'hunting', 'grazing', 'mating', 'wandering', 'walking'];
 
 function loadAspect(cell, name) {
 	var aspects = {
+		'runningAway': RunningAway,
 		'hunting': Hunting,
 		'mating': Mating,
 		'fromWalls': FromWalls,
@@ -15,6 +16,46 @@ function loadAspect(cell, name) {
 		'looking': Looking
 	};
 	return new aspects[name](cell);
+}
+
+function RunningAway(cell) {
+	this.cell = cell;
+}
+
+RunningAway.prototype.prepare = function() {
+	this.hunter = undefined;
+	var tcell = this.cell;
+	var tab = this.cell.nearestCells(function(c){return c.color==='red' && c.distance(tcell)<200;});
+	var n = tab.length;
+	for(var i=0; i<n; i++) {
+		var c = tab[i];
+		if(c.velocity.length() > 1 && 
+			c.velocity.dotReduced(tcell.position.minus(c.position)) > 0.5) {
+			this.hunter = c;
+			break;
+		}
+	}
+}
+
+RunningAway.prototype.perform = function() {
+	if(this.hunter === undefined)
+		return;
+	var f = this.cell.position.minus(this.hunter.position).normalize().scale(1.5);
+	this.cell.getAspect('walking').applyForce(f);
+};
+
+RunningAway.prototype.draw = function(ctx) {
+	if(this.hunter) {
+		ctx.beginPath();
+		ctx.strokeStyle = 'yellow';
+		ctx.moveTo(this.cell.position.x, this.cell.position.y);
+		ctx.lineTo(this.hunter.position.x, this.hunter.position.y);
+		ctx.stroke();
+	}
+};
+
+RunningAway.prototype.priority = function() {
+	return this.hunter === undefined ? 0 : 10;
 }
 
 function Hunting(cell) {
