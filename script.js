@@ -59,8 +59,13 @@ var Cell = function(pos, color, aspectNames){
 	this.color = color;
 	this.gender = Math.random()<0.1 ? 1 : 0;
 	this.aspects = {};
-	for(var i=0; i<aspectNames.length; i++) {
-		loadAspect(this, aspectNames[i]);
+	this.aspectList = [];
+	for(var i=0; i<aspectOrder.length; i++) {
+		if(aspectNames.indexOf(aspectOrder[i]) == -1)
+			continue;
+		var aspect = loadAspect(this, aspectOrder[i]);
+		this.aspects[aspectOrder[i]] = aspect;
+		this.aspectList.push(aspect);		
 	}
 }
 
@@ -101,43 +106,42 @@ Cell.prototype.draw = function(ctx) {
 	ctx.fill();
 	ctx.closePath();
 	
-	for(var i=0; i<aspectOrder.length; i++) {
-		var a = aspectOrder[i];
-		if(this.aspects[a].draw)
-			this.aspects[a].draw(ctx);
+	for(var i=0; i<this.aspectList.length; i++) {
+		var a = this.aspectList[i];
+		if(a.draw)
+			a.draw(ctx);
 	}
 }
 
 Cell.prototype.sim = function() {
 
-	for(var i=0; i<aspectOrder.length; i++) {
-		var a = aspectOrder[i];
-		if(this.aspects[a].prepare)
-			this.aspects[a].prepare();
+	for(var i=0; i<this.aspectList.length; i++) {
+		var a = this.aspectList[i];
+		if(a.prepare)
+			a.prepare();
 	}
 
 	// find top priority
 	var top = undefined;
 	var max = -1;
 	
-	for(var i=0; i<aspectOrder.length; i++) {
-		var a = aspectOrder[i];
-		if(this.aspects[a].priority) {
-			var p = this.aspects[a].priority();
+	for(var i=0; i<this.aspectList.length; i++) {
+		var a = this.aspectList[i];
+		if(a.priority) {
+			var p = a.priority();
 			if(p>max) {
 				max = p;
-				top = this.aspects[a];
+				top = a;
 			}
 		}
 	}
 	
 	// perform aspects with no priority and the top one
-	for(var i=0; i<aspectOrder.length; i++) {
-		var a = aspectOrder[i];
-		var asp = this.aspects[a];
-		if(asp.perform) {
-			if(!asp.priority || asp===top) {
-				asp.perform();
+	for(var i=0; i<this.aspectList.length; i++) {
+		var a = this.aspectList[i];
+		if(a.perform) {
+			if(!a.priority || a===top) {
+				a.perform();
 			}
 		}
 	}

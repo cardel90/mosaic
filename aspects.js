@@ -13,7 +13,7 @@ function loadAspect(cell, name) {
 		'walking': Walking,
 		'looking': Looking
 	};
-	cell.aspects[name] = (new aspects[name](cell));
+	return new aspects[name](cell);
 }
 
 function Mating(cell) {
