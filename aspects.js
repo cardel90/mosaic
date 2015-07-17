@@ -1,8 +1,9 @@
 // temporary, DAG by pre- and post- requirements in the future
-var aspectOrder = ['looking', 'herding', 'fromOthers', 'eating', 'grazing', 'wandering', 'walking'];
+var aspectOrder = ['looking', 'herding', 'fromOthers', 'fromWalls', 'eating', 'grazing', 'wandering', 'walking'];
 
 function loadAspect(cell, name) {
 	var aspects = {
+		'fromWalls': FromWalls,
 		'fromOthers': FromOthers,
 		'herding': Herding,
 		'grazing': Grazing,
@@ -13,6 +14,30 @@ function loadAspect(cell, name) {
 	};
 	cell.aspects[name] = (new aspects[name](cell));
 }
+
+function FromWalls(cell) {
+	this.cell = cell;
+	this.v = new Vector(0, 0);
+}
+
+FromWalls.prototype.prepare = function() {
+	var v = this.cell.position;
+	var x = 0;
+	var y = 0;
+	if(v.x > width-10)
+		x += -1;
+	if(v.y > height-10)
+		y += -1;
+	if(v.x < 10)
+		x += 1;
+	if(v.y < 10)
+		y += 1;
+	this.v = new Vector(x, y);
+};
+
+FromWalls.prototype.perform = function() {
+	this.cell.getAspect('walking').applyForce(this.v.scale(5));
+};
 
 function FromOthers(cell) {
 	this.cell = cell;

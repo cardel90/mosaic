@@ -1,29 +1,4 @@
 
-function FromWalls(cell) {
-	this.cell = cell;
-	this.v = new Vector(0, 0);
-}
-
-FromWalls.prototype.prepare = function() {
-	var v = this.cell.position;
-	var x = 0;
-	var y = 0;
-	if(v.x > width-10)
-		x += -1;
-	if(v.y > height-10)
-		y += -1;
-	if(v.x < 10)
-		x += 1;
-	if(v.y < 10)
-		y += 1;
-	this.v = new Vector(x, y);
-};
-
-FromWalls.prototype.perform = function() {
-	return this.v.scale(5);
-};
-
-
 function FromWater(cell) {
 	this.cell = cell;
 	this.v = new Vector(0, 0);
