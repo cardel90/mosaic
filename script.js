@@ -27,7 +27,7 @@ Water.prototype.draw = function(ctx) {
 function makePredator(position) {
 	var ncell = new Cell(position, 'red');
 	ncell.behaviors = [new FromWater(ncell), new FromWalls(ncell)];
-	ncell.needs = [new Hunting(ncell), new Wandering(ncell)];
+	ncell.needs = [new Hunting(ncell)];
 	ncell.cells = cells;
 	ncell.fat = 10;
 	cells.push(ncell);
@@ -37,7 +37,7 @@ function makeHerbivore(position) {
 	var color = colors[Math.floor(Math.random()*colors.length)];
 	var ncell = new Cell(Vector.random(25, 25, width-50, height-50), color);
 	ncell.behaviors = [new Herding(ncell), new FromOthers(ncell), new FromWater(ncell), new FromWalls(ncell)];
-	ncell.needs = [new Feeding(ncell), new Mating(ncell), new Wandering(ncell)];
+	ncell.needs = [new Feeding(ncell), new Mating(ncell)];
 	ncell.cells = cells;
 	cells.push(ncell);
 }
@@ -66,13 +66,14 @@ var Cell = function(pos, color){
 	loadAspect(this, 'looking');
 	loadAspect(this, 'walking');
 	loadAspect(this, 'eating');
+	loadAspect(this, 'wandering');
 }
 
 Cell.prototype.makeChild = function(position) {
 	var ncell = new Cell(this.position, this.color);
 	// TODO: deep clone of parent
 	ncell.behaviors = [new Herding(ncell), new FromOthers(ncell), new FromWater(ncell), new FromWalls(ncell)];
-	ncell.needs = [new Feeding(ncell), new Mating(ncell), new Wandering(ncell)];
+	ncell.needs = [new Feeding(ncell), new Mating(ncell)];
 	ncell.cells = cells;
 	ncell.fat = 7;
 	cells.push(ncell);

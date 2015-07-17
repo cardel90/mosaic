@@ -58,37 +58,6 @@ Feeding.prototype.priority = function() {
 	return this.target === undefined ? 0 : this.cell.getAspect('eating').hunger;
 }
 
-
-function Wandering(cell) {
-	this.cell = cell;
-	this.speed = new Vector(0, 0);
-	this.target = Vector.random(25, 25, width-50, height-50);
-}
-
-Wandering.prototype.prepare = function() {
-	if(Math.random()<0.001 || this.target.distance(this.cell.position)<10)
-		this.target = Vector.random(25, 25, width-50, height-50);
-	var desired = this.target.minus(this.cell.position).normalize();
-	this.speed = this.speed.plus(desired.minus(this.speed).normalize().scale(0.01));
-}
-
-Wandering.prototype.perform = function() {
-	return this.speed.capLength(0.5);
-};
-
-Wandering.prototype.draw = function(ctx) {
-	return;
-	ctx.beginPath();
-	ctx.strokeStyle = '#CCCCCC';
-	ctx.moveTo(this.cell.position.x, this.cell.position.y);
-	ctx.lineTo(this.target.x, this.target.y);
-	ctx.stroke();
-};
-
-Wandering.prototype.priority = function() {
-	return 1;
-}
-
 function Mating(cell) {
 	this.cell = cell;
 	this.horny = 0;

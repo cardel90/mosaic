@@ -1,13 +1,44 @@
 // temporary, DAG by pre- and post- requirements in the future
-var aspectOrder = ['looking', 'eating', 'walking'];
+var aspectOrder = ['looking', 'eating', 'wandering', 'walking'];
 
 function loadAspect(cell, name) {
 	var aspects = {
+		'wandering': Wandering,
 		'eating': Eating,
 		'walking': Walking,
 		'looking': Looking
 	};
 	cell.aspects[name] = (new aspects[name](cell));
+}
+
+function Wandering(cell) {
+	this.cell = cell;
+	this.speed = new Vector(0, 0);
+	this.target = Vector.random(25, 25, width-50, height-50);
+}
+
+Wandering.prototype.prepare = function() {
+}
+
+Wandering.prototype.perform = function() {
+	if(Math.random()<0.001 || this.target.distance(this.cell.position)<10)
+		this.target = Vector.random(25, 25, width-50, height-50);
+	var desired = this.target.minus(this.cell.position).normalize();
+	this.speed = this.speed.plus(desired.minus(this.speed).normalize().scale(0.01));
+	//this.cell.getAspect('walking').applyForce(this.speed.capLength(0.5));
+	this.cell.getAspect('walking').applyForce(this.target.minus(this.cell.position).scale(2));
+};
+
+Wandering.prototype.draw = function(ctx) {
+	ctx.beginPath();
+	ctx.strokeStyle = '#CCCCCC';
+	ctx.moveTo(this.cell.position.x, this.cell.position.y);
+	ctx.lineTo(this.target.x, this.target.y);
+	ctx.stroke();
+};
+
+Wandering.prototype.priority = function() {
+	return 1;
 }
 
 function Eating(cell) {
