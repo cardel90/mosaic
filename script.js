@@ -29,7 +29,7 @@ function Species(name, colors, aspectTypes) {
 Species.prototype.makeCell = function(position) {
 	var color = this.colors[Math.floor(Math.random()*this.colors.length)];
 	var ncell = new Cell(position, color, this.aspectTypes);
-	ncell.species = this.species;
+	ncell.species = this;
 	ncell.cells = cells;
 	cells.push(ncell);
 }

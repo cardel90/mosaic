@@ -8,6 +8,7 @@ Mating.prototype.color = 'pink';
 Hunting.prototype.color = 'red';
 RunningAway.prototype.color = 'yellow';
 Grazing.prototype.color = 'green';
+Wandering.prototype.color = 'lightgrey';
 
 Cell.prototype.draw = function(ctx) {
 	ctx.strokeStyle = 'black';
@@ -85,13 +86,16 @@ function cellAside(cell) {
 	$('#cell').text('');
 	if(!cell)
 		return;
-	$('#cell').text('Cell');
+	$('#cell').text(cell.species.name);
 	for(var aName in cell.aspects) {
 		var a = cell.aspects[aName];
 		var node = $('<div>');
 		node.css('background-color', a.color ? a.color : 'grey');
+		if(a===cell.top) {
+			node.addClass('top-behavior');
+		}
 		console.log(a.color);
-		node.text( (a===cell.top?'*':' ') + aName);
+		node.text( aName);
 		$('#cell').append(node);
 	}
 }
@@ -116,8 +120,7 @@ function initGui() {
 	$('#play').click(play);
 	$('#plants').change(plants);
 	$('#speed').change(changeSpeed);
-	$('#canvas1').click(click);
-	$('#canvas2').click(click);
+	$('#canvas').click(click);
 
 	changeSpeed();
 	plants();

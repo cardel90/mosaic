@@ -1,6 +1,6 @@
 canvas { 
 	border: 2px solid #000; 
-	width: 1000px;
+	
 	float: left;
 	/*
 	position: fixed;
@@ -10,6 +10,19 @@ canvas {
 }
 
 aside {
+	margin: 10px;
 	float: left;
 	width: 250px;
+}
+
+aside div {
+	margin: 5px;
+	padding: 5px;
+}
+
+.top-behavior {
+	outline-color: black;
+    outline-style: solid;
+    outline-width: 2px;
+	outline-offset: 1px;
 }
