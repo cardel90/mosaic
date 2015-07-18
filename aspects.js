@@ -402,6 +402,7 @@ Wandering.prototype.perform = function() {
 };
 
 Wandering.prototype.draw = function(ctx) {
+	return;
 	ctx.beginPath();
 	ctx.strokeStyle = '#CCCCCC';
 	ctx.moveTo(this.cell.position.x, this.cell.position.y);
