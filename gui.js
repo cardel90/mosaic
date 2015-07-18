@@ -54,7 +54,6 @@ function repaint() {
 	}
 	
 	cellAside(selected);
-	listSpecies();
 }
 
 function play() {
@@ -121,12 +120,23 @@ function click(e) {
 	}
 }
 
+function addCell() {
+	var name = $('#adder select').val();
+	for(var i=0; i<species.length; i++) {
+		if(species[i].name == name) {
+			selected = species[i].makeCell(Vector.random(25, 25, width-50, height-50));
+		}
+	}
+}
+
 function listSpecies() {
 	$('#species').text('');
 	for(var i=0; i<species.length; i++) {
 		var s = species[i];
 		var node = $('<div>');
+		var option = $('<option>');
 		node.append($('<h1>').text(s.name));
+		option.text(s.name);
 		var ul = $('<ul>');
 		for(var j in s.aspectTypes) {
 			var li = $('<li>');
@@ -135,6 +145,7 @@ function listSpecies() {
 		}
 		node.append(ul);
 		$('#species').append(node);
+		$('#adder select').append(option);
 	}
 }
 
@@ -156,6 +167,9 @@ function initGui() {
 	$('#speed').change(changeSpeed);
 	$('#canvas').click(click);
 	$('.showtab').click(changeTab);
+	$('#add').click(addCell);
+	
+	listSpecies();
 
 	changeSpeed();
 	plants();

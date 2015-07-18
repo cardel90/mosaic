@@ -32,6 +32,7 @@ Species.prototype.makeCell = function(position) {
 	ncell.species = this;
 	ncell.cells = cells;
 	cells.push(ncell);
+	return ncell;
 }
 
 var species = [
