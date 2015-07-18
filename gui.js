@@ -93,7 +93,6 @@ function cellAside(cell) {
 		if(a===cell.top) {
 			node.addClass('top-behavior');
 		}
-		console.log(a.color);
 		var str = "";
 		if(a.report) {
 			var report = a.report();

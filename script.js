@@ -76,10 +76,7 @@ Cell.prototype.getSize = function() {
 }
 
 Cell.prototype.makeChild = function(position) {
-	var ncell = new Cell(this.position.plus(new Vector(20, 20)), this.color, this.aspectTypes);
-	ncell.cells = cells;
-	cells.push(ncell);
-	ncell.sim();
+	this.species.makeCell(this.position.plus(new Vector(20, 20)));
 }
 
 Cell.prototype.vectorTo = function(other) {
