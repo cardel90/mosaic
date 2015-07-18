@@ -166,7 +166,11 @@ Hunting.prototype.draw = function(ctx) {
 };
 
 Hunting.prototype.priority = function() {
-	return this.prey === undefined ? 0 : this.cell.getAspect(Eating).hunger;
+	return this.prey === undefined ? 0 : this.cell.getAspect(Eating).hunger - this.prey.distance(this.cell)/100;
+}
+
+Hunting.prototype.report = function() {
+	return [this.priority()];
 }
 
 function Mating(cell) {
@@ -372,7 +376,11 @@ Grazing.prototype.draw = function(ctx) {
 }
 
 Grazing.prototype.priority = function() {
-	return this.target === undefined ? 0 : this.cell.getAspect(Eating).hunger;
+	return this.target === undefined ? 0 : this.cell.getAspect(Eating).hunger - this.target.position.distance(this.cell.position)/100;
+}
+
+Grazing.prototype.report = function() {
+	return [this.priority()];
 }
 
 function Wandering(cell) {

@@ -37,7 +37,8 @@ Species.prototype.makeCell = function(position) {
 
 var species = [
 	new Species('Wilk', ['red'], [Looking, Walking, Eating, Hunting, Wandering]),
-	new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering])
+	new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering]),
+	new Species('Niedźwiedź', ['teal'], [Looking, FromWalls, Walking, Eating, Grazing, Hunting, Wandering])
 ];
 
 function Food(position, amount) {
