@@ -54,6 +54,7 @@ function repaint() {
 	}
 	
 	cellAside(selected);
+	listSpecies();
 }
 
 function play() {
@@ -117,6 +118,23 @@ function click(e) {
 			cellAside(selected);
 			break;
 		}
+	}
+}
+
+function listSpecies() {
+	$('#species').text('');
+	for(var i=0; i<species.length; i++) {
+		var s = species[i];
+		var node = $('<div>');
+		node.append($('<h1>').text(s.name));
+		var ul = $('<ul>');
+		for(var j in s.aspectTypes) {
+			var li = $('<li>');
+			li.text(s.aspectTypes[j].name);
+			ul.append(li);
+		}
+		node.append(ul);
+		$('#species').append(node);
 	}
 }
 

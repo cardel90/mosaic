@@ -34,8 +34,10 @@ Species.prototype.makeCell = function(position) {
 	cells.push(ncell);
 }
 
-var predator = new Species('Wilk', ['red'],	[Looking, Walking, Eating, Hunting, Wandering]);
-var herbivore = new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering]);
+var species = [
+	new Species('Wilk', ['red'], [Looking, Walking, Eating, Hunting, Wandering]),
+	new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering])
+];
 
 function Food(position, amount) {
 	this.position = position;
@@ -164,13 +166,12 @@ $(function(){
 	height = $('canvas').get(0).height;
 
 	for(var i=0; i<30; i++) {
-		herbivore.makeCell(Vector.random(25, 25, width-50, height-50));
+		species[1].makeCell(Vector.random(25, 25, width-50, height-50));
 	}
 	
-	predator.makeCell(Vector.random(25, 25, width-50, height-50));	
-	predator.makeCell(Vector.random(25, 25, width-50, height-50));
+	species[0].makeCell(Vector.random(25, 25, width-50, height-50));
+	species[0].makeCell(Vector.random(25, 25, width-50, height-50));
 
-	
 	initGui();
 	
 	update();
