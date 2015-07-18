@@ -76,11 +76,6 @@ function changeSpeed() {
 	}
 }
 
-function plants() {
-	var v = $('#plants').val();
-	growth = v;
-}
-
 function cellAside(cell) {
 	$('#cell').text('');
 	if(!cell)
@@ -162,16 +157,16 @@ function initGui() {
 	canvas = $('canvas').get(0);
 	
 	$('#play').click(play);
-	$('#plants').change(plants);
 	$('#speed').change(changeSpeed);
 	$('#canvas').click(click);
 	$('.showtab').click(changeTab);
 	$('#add').click(addCell);
+
+	config.add(new ConfigParam('plant-growth', 'int', {min:0, max:100}, 20, 'Amount of plants'));
 	
 	listSpecies();
 
 	changeSpeed();
-	plants();
 	play();
 	
 	showTab('simulation');
