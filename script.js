@@ -24,20 +24,22 @@ Water.prototype.draw = function(ctx) {
 	ctx.fill();
 }
 
-function makePredator(position) {
-	var ncell = new Cell(position, 'red', 
-		[Walking, Eating, Hunting, Wandering]);
+function Species(name, colors, aspectTypes) {
+	this.name = name;
+	this.colors = colors;
+	this.aspectTypes = aspectTypes;
+}
+
+Species.prototype.makeCell = function(position) {
+	var color = this.colors[Math.floor(Math.random()*this.colors.length)];
+	var ncell = new Cell(position, color, this.aspectTypes);
+	ncell.name = this.name;
 	ncell.cells = cells;
 	cells.push(ncell);
 }
 
-function makeHerbivore(position) {
-	var color = colors[Math.floor(Math.random()*colors.length)];
-	var ncell = new Cell(Vector.random(25, 25, width-50, height-50), color, 
-		[Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering]);
-	ncell.cells = cells;
-	cells.push(ncell);
-}
+var predator = new Species('Wilk', ['red'],	[Walking, Eating, Hunting, Wandering]);
+var herbivore = new Species('Sarna', ['yellow', 'blue'], [Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering]);
 
 function Food(position, amount) {
 	this.position = position;
@@ -233,10 +235,10 @@ $(function(){
 	// waters[0] = new Water(new Vector(500, 300), 100);
 	
 	for(var i=0; i<30; i++) {
-		makeHerbivore(Vector.random(25, 25, width-50, height-50));
+		herbivore.makeCell(Vector.random(25, 25, width-50, height-50));
 	}
-//	makePredator(Vector.random(25, 25, width-50, height-50));
-//	makePredator(Vector.random(25, 25, width-50, height-50));
+	predator.makeCell(Vector.random(25, 25, width-50, height-50));	
+	predator.makeCell(Vector.random(25, 25, width-50, height-50));
 	
 	$('#play').click(play);
 	$('#plants').change(plants);
