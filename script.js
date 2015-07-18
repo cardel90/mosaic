@@ -27,19 +27,19 @@ Water.prototype.draw = function(ctx) {
 function Species(name, colors, aspectTypes) {
 	this.name = name;
 	this.colors = colors;
-	this.aspectTypes = aspectTypes;
+	this.aspectTypes = sortAspects(aspectTypes);
 }
 
 Species.prototype.makeCell = function(position) {
 	var color = this.colors[Math.floor(Math.random()*this.colors.length)];
 	var ncell = new Cell(position, color, this.aspectTypes);
-	ncell.name = this.name;
+	ncell.species = this.species;
 	ncell.cells = cells;
 	cells.push(ncell);
 }
 
-var predator = new Species('Wilk', ['red'],	[Walking, Eating, Hunting, Wandering]);
-var herbivore = new Species('Sarna', ['yellow', 'blue'], [Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering]);
+var predator = new Species('Wilk', ['red'],	[Looking, Walking, Eating, Hunting, Wandering]);
+var herbivore = new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering]);
 
 function Food(position, amount) {
 	this.position = position;
@@ -61,7 +61,7 @@ var Cell = function(pos, color, aspectTypes){
 	this.color = color;
 	this.gender = Math.random()<0.1 ? 1 : 0;
 	this.fat = 10;
-	this.aspectTypes = sortAspects(aspectTypes);
+	this.aspectTypes = aspectTypes;
 	this.aspects = {};
 	this.aspectList = [];
 	for(var i=0; i<this.aspectTypes.length; i++) {
