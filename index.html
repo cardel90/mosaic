@@ -6,24 +6,25 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
 	<script src="vector.js"></script>
 	<script src="aspects.js"></script> 
-	<script src="script.js"></script> 
+	<script src="script.js"></script>
+	<script src="gui.js"></script> 
 	<link rel="Stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
 	<aside>
-		<button id="play">Play</button><br>
-		<label for="speed">Speed</label>
-		<input id="speed" type="range" min="0" max="100" step="1" value="70" /><br>
-		<label for="plants">Plant amount</label>
-		<input id="plants" type="range" min="0" max="500" step="1" value="50" />
+		<div id="controls">
+			<button id="play">Play</button><br>
+			<label for="speed">Speed</label>
+			<input id="speed" type="range" min="0" max="100" step="1" value="70" /><br>
+			<label for="plants">Plant amount</label>
+			<input id="plants" type="range" min="0" max="500" step="1" value="50" />
+		</div>
+		<div id="cell"></div>
 	</aside>
 	
 	<canvas id="canvas1" width="1000" height="800">
 	No canvas.
 	</canvas>
 	
-	<canvas id="canvas2" width="1000" height="800">
-	No canvas.
-	</canvas>
 </body>
 </html>
