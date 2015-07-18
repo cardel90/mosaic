@@ -1,4 +1,3 @@
-
 var speed = 20;
 var canvas;
 var interval;
@@ -121,6 +120,16 @@ function click(e) {
 	}
 }
 
+function changeTab(e) {
+	var tabId = $(this).attr('data-tabid');
+	showTab(tabId);
+}
+
+function showTab(tabId) {
+	$('.tab').hide();
+	$('#'+tabId).show();
+}
+
 function initGui() {
 	canvas = $('canvas').get(0);
 	
@@ -128,7 +137,11 @@ function initGui() {
 	$('#plants').change(plants);
 	$('#speed').change(changeSpeed);
 	$('#canvas').click(click);
+	$('.showtab').click(changeTab);
 
 	changeSpeed();
 	plants();
+	play();
+	
+	showTab('simulation');
 }

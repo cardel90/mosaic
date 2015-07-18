@@ -1,21 +1,19 @@
-canvas { 
-	border: 2px solid #000; 
-	
-	float: left;
-	/*
-	position: fixed;
-	top: 60px;
-	left: 250px;
-	*/
+.tab {
+	border: 1px solid grey;
+	display: none;
 }
 
-aside {
+canvas { 
+	border: 2px solid black;
+}
+
+#sidebox {
 	margin: 10px;
 	float: left;
 	width: 250px;
 }
 
-aside div {
+#sidebox div {
 	margin: 5px;
 	padding: 5px;
 }

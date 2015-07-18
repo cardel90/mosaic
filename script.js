@@ -174,5 +174,4 @@ $(function(){
 	initGui();
 	
 	update();
-	play();
 })
