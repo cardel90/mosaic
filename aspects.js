@@ -255,7 +255,8 @@ function FromOthers(cell) {
 }
 
 FromOthers.modifiedDistance = function(from, to) {
-	return from.distance(to)-1.1*to.getSize()-from.getSize() - (to.color === 'red' ? 5 : 0);
+	var d = from.distance(to)-1.1*to.getSize()-from.getSize();
+	return d<=0 ? 0.001 : d;
 }
 
 FromOthers.prototype.prepare = function() {
@@ -522,7 +523,7 @@ Walking.prototype.perform = function() {
 	desired = desired.capLength(2);
 	
 	desired = desired.scale(0.6*(20-this.cell.getSize())/20 + 0.7);
-	this.velocity = this.velocity.plus(desired.minus(this.velocity).scale(0.1));
+	this.velocity = this.velocity.plus(desired.minus(this.velocity).scale(0.3));
 	
 	// for legacy
 	this.cell.velocity = this.velocity;
