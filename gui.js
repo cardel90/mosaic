@@ -95,7 +95,14 @@ function cellAside(cell) {
 			node.addClass('top-behavior');
 		}
 		console.log(a.color);
-		node.text( aName);
+		var str = "";
+		if(a.report) {
+			var report = a.report();
+			for(var i=0; i<report.length; i++)
+				report[i] = Math.round(report[i]*100)/100;
+			str = "["+report.join(',')+"]";
+		}
+		node.text(aName + ' : ' + str);
 		$('#cell').append(node);
 	}
 }

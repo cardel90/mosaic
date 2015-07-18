@@ -216,6 +216,10 @@ Mating.prototype.priority = function() {
 	return this.mate === undefined ? 0 : this.horny;
 }
 
+Mating.prototype.report = function() {
+	return [this.cell.gender, this.horny];
+}
+
 function FromWalls(cell) {
 	this.cell = cell;
 	this.v = new Vector(0, 0);
@@ -422,6 +426,10 @@ Eating.prototype.feed = function(amount) {
 	this.fat += amount;
 }
 
+Eating.prototype.report = function() {
+	return [this.fat, this.hunger];
+}
+
 function Looking(cell) {
 	this.cell = cell;
 	this.angle = Math.PI*3/4;
@@ -476,6 +484,10 @@ Looking.prototype.perform = function() {
 	});
 }
 
+Looking.prototype.report = function() {
+	return [this.seen.length];
+}
+
 function Walking(cell) {
 	this.cell = cell;
 	this.velocity = new Vector(0, 0);
@@ -491,7 +503,6 @@ Walking.prototype.applyForce = function(f) {
 Walking.prototype.prepare = function() {
 	this.force = new Vector(0, 0);
 	this.forceCount = 0;
-	
 }
 
 Walking.prototype.perform = function() {
@@ -508,4 +519,9 @@ Walking.prototype.perform = function() {
 	// for legacy
 	this.cell.velocity = this.velocity;
 	this.cell.position = this.cell.position.plus(this.velocity);
+}
+
+
+Walking.prototype.report = function() {
+	return [this.forceCount];
 }
