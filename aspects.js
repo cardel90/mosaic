@@ -58,11 +58,12 @@ Hunting.pre = [Eating];
 Hunting.post = [Walking];
 
 function loadAspect(cell, aspect) {
-	return new aspect(cell);
+	var result = new aspect();
+	result.cell = cell;
+	return result;
 }
 
-function FromWater(cell) {
-	this.cell = cell;
+function FromWater() {
 	this.v = new Vector(0, 0);
 }
 
@@ -85,8 +86,7 @@ FromWater.prototype.perform = function() {
 	this.cell.getAspect(Walking).applyForce(this.v.scale(2));
 };
 
-function RunningAway(cell) {
-	this.cell = cell;
+function RunningAway() {
 }
 
 RunningAway.prototype.prepare = function() {
@@ -125,8 +125,7 @@ RunningAway.prototype.priority = function() {
 	return this.hunter === undefined ? 0 : 100;
 }
 
-function Hunting(cell) {
-	this.cell = cell;
+function Hunting() {
 }
 
 Hunting.prototype.findPrey = function() {
@@ -173,8 +172,7 @@ Hunting.prototype.report = function() {
 	return [this.priority()];
 }
 
-function Mating(cell) {
-	this.cell = cell;
+function Mating() {
 	this.horny = 0;
 }
 
@@ -224,8 +222,7 @@ Mating.prototype.report = function() {
 	return [this.cell.gender, this.horny];
 }
 
-function FromWalls(cell) {
-	this.cell = cell;
+function FromWalls() {
 	this.v = new Vector(0, 0);
 }
 
@@ -248,8 +245,7 @@ FromWalls.prototype.perform = function() {
 	this.cell.getAspect(Walking).applyForce(this.v.scale(5));
 };
 
-function FromOthers(cell) {
-	this.cell = cell;
+function FromOthers() {
 	this.vector = new Vector(0, 0);
 	this.tab = [];
 }
@@ -293,8 +289,7 @@ FromOthers.prototype.draw = function(ctx) {
 	}
 }
 
-function Herding(cell) {
-	this.cell = cell;
+function Herding() {
 	this.vector = new Vector(0, 0);
 }
 
@@ -320,8 +315,7 @@ Herding.prototype.perform = function() {
 	this.cell.getAspect(Walking).applyForce(this.vector);
 };
 
-function Grazing(cell) {
-	this.cell = cell;
+function Grazing() {
 }
 
 Grazing.prototype.prepare = function() {
@@ -384,8 +378,7 @@ Grazing.prototype.report = function() {
 	return [this.priority()];
 }
 
-function Wandering(cell) {
-	this.cell = cell;
+function Wandering() {
 	this.speed = new Vector(0, 0);
 	this.target = Vector.random(25, 25, width-50, height-50);
 }
@@ -413,8 +406,7 @@ Wandering.prototype.priority = function() {
 	return 1;
 }
 
-function Eating(cell) {
-	this.cell = cell;
+function Eating() {
 	this.fat = 10;
 	this.hunger = 0;
 }
@@ -439,8 +431,7 @@ Eating.prototype.report = function() {
 	return [this.fat, this.hunger];
 }
 
-function Looking(cell) {
-	this.cell = cell;
+function Looking() {
 	this.angle = Math.PI*3/4;
 	this.range = 100;
 	this.seen = [];
@@ -497,8 +488,7 @@ Looking.prototype.report = function() {
 	return [this.seen.length];
 }
 
-function Walking(cell) {
-	this.cell = cell;
+function Walking() {
 	this.velocity = new Vector(0, 0);
 	this.force = new Vector(0, 0);
 	this.forceCount = 0;
