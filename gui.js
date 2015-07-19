@@ -25,12 +25,14 @@ Cell.prototype.draw = function(ctx) {
 		ctx.closePath();
 	}
 	
-	// draw aspects with no priority and the top one
-	for(var i=0; i<this.aspectList.length; i++) {
-		var a = this.aspectList[i];
-		if(a.draw) {
-			if(!a.priority || a===this.top) {
-				a.draw(ctx);
+	if(config.get('draw-aspects')) {
+		// draw aspects with no priority and the top one
+		for(var i=0; i<this.aspectList.length; i++) {
+			var a = this.aspectList[i];
+			if(a.draw) {
+				if(!a.priority || a===this.top) {
+					a.draw(ctx);
+				}
 			}
 		}
 	}
@@ -163,6 +165,7 @@ function initGui() {
 	$('#add').click(addCell);
 
 	config.add(new ConfigParam('plant-growth', 'int', {min:0, max:100}, 20, 'Amount of plants'));
+	config.add(new ConfigParam('draw-aspects', 'bool', {}, true, 'Draw aspect lines'));
 	
 	listSpecies();
 
