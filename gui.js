@@ -148,6 +148,20 @@ function listSpecies() {
 	}
 }
 
+function makeTree(sp) {
+	if(!sp) return;
+	var $result = $('<div>');
+	$result.attr('class', 'node');
+	$result.append(sp.name);
+	for(var i=0; i<species.length; i++) {
+		if(species[i].ancestor === sp) {
+			var $child = makeTree(species[i]);
+			$result.append($child);
+		}
+	}
+	return $result;
+}
+
 function changeTab(e) {
 	var tabId = $(this).attr('data-tabid');
 	showTab(tabId);
@@ -169,6 +183,7 @@ function initGui() {
 	$('#add').click(addCell);
 	
 	listSpecies();
+	$('#taxonomy').append(makeTree(root));
 
 	changeSpeed();
 	plants();
