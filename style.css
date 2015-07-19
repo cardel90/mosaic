@@ -1,6 +1,7 @@
 .tab {
 	border: 1px solid grey;
 	display: none;
+	padding: 5px;
 }
 
 canvas { 
@@ -41,4 +42,15 @@ canvas {
 
 .activetab {
 	border-bottom: 1px solid white;
+}
+
+.aspect {
+	border: 1px solid grey;
+	width: 500px;
+	color: grey;
+}
+
+.aspect-selected {
+	border: 1px solid black;
+	color: black;
 }

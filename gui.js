@@ -130,6 +130,7 @@ function addCell() {
 
 function listSpecies() {
 	$('#species').text('');
+	$('#adder select').text('');
 	for(var i=0; i<species.length; i++) {
 		var s = species[i];
 		var node = $('<div>');
@@ -160,6 +161,55 @@ function makeTree(sp) {
 	return $result;
 }
 
+function makeCreator() {
+	$result = $('<div>');
+	for(var i=0; i<allAspects.length; i++) {
+		var aspect = allAspects[i];
+		var $div = $('<div>');
+		$div.addClass('aspect');
+		$div.attr('id', aspect.name+'-div');
+		var $checkbox = $('<input>');
+		$checkbox.attr('type', 'checkbox');
+		$checkbox.attr('id', aspect.name+'-selected');
+		$checkbox.click(function(){
+			$(this).parent().toggleClass('aspect-selected');
+		});
+		$div.append($checkbox);
+		$div.append(aspect.name);
+		for(var j in aspect.defaults) {
+			var $label = $('<label>').text(j);
+			$label.attr('for', aspect.name+'-'+j);
+			var $input = $('<input>');
+			$input.attr('id', aspect.name+'-'+j);
+			$input.val(aspect.defaults[j]);
+			$div.append('<br>').append($label).append($input);
+		}
+		$result.append($div).append('<br>');
+	}
+	$('#species-creator').prepend($result);
+}
+
+function createSpecies() {
+	var aspectTypes = [];
+	var aspectArguments = {};
+	for(var i=0; i<allAspects.length; i++) {
+		var aspect = allAspects[i];
+		if($('#'+aspect.name+'-selected').is(':checked')) {
+			aspectTypes.push(aspect);
+			var args = {};
+			for(var j in aspect.defaults) {
+				args[j] = $('#'+aspect.name+'-'+j).val();
+			}
+			aspectArguments[aspect.name] = args;
+		}
+	}
+	var sp = new Species($('#species-name').val(), ['lime'], aspectTypes, aspectArguments, root);
+	species.push(sp);
+	
+	listSpecies();
+	$('#taxonomy').text('').append(makeTree(root));
+}
+
 function changeTab(e) {
 	var tabId = $(this).attr('data-tabid');
 	showTab(tabId);
@@ -184,11 +234,13 @@ function initGui() {
 	$('#add').click(addCell);
 	
 	listSpecies();
-	$('#taxonomy').append(makeTree(root));
+	$('#taxonomy').text('').append(makeTree(root));
+	makeCreator();
+	$('#create').click(createSpecies);
 
 	changeSpeed();
 	plants();
 	play();
 	
-	showTab('simulation');
+	showTab('species-creator');
 }
