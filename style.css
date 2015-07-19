@@ -29,3 +29,16 @@ canvas {
 	border-left: 1px solid black;
 	margin-left: 5px;
 }
+
+.showtab  {
+	background: white;
+	border: 1px solid grey;
+	border-radius: 5px 5px 0px 0px;
+	outline: none;
+	margin-bottom: -1px;
+	cursor: pointer;
+}
+
+.activetab {
+	border-bottom: 1px solid white;
+}
