@@ -58,8 +58,7 @@ Hunting.pre = [Eating];
 Hunting.post = [Walking];
 
 function loadAspect(cell, aspect, aspectArguments) {
-	var args = Array.prototype.slice.call(arguments, 2);
-	var result = new (Function.prototype.bind.call(aspect, aspectArguments));
+	var result = new (Function.prototype.bind.call(aspect, null, aspectArguments));
 	result.cell = cell;
 	return result;
 }
@@ -489,12 +488,12 @@ Looking.prototype.report = function() {
 	return [this.seen.length];
 }
 
-function Walking(topSpeed, agility) {
+function Walking(args) {
 	this.velocity = new Vector(0, 0);
 	this.force = new Vector(0, 0);
 	this.forceCount = 0;
-	this.topSpeed = topSpeed ? topSpeed : 2;
-	this.agility = agility ? agility : 0.2;
+	this.topSpeed = 'topSpeed' in args ? args.topSpeed : 2;
+	this.agility = 'agility' in args ? args.agility : 0.2;
 }
 
 Walking.prototype.applyForce = function(f) {

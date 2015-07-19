@@ -43,7 +43,7 @@ Species.prototype.makeCell = function(position) {
 var deer = new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering], {});
 var bear = new Species('Niedźwiedź', ['teal'], [Looking, FromWalls, Walking, Eating, Grazing, Hunting, Wandering], {}, deer);
 var wolf = new Species('Wilk', ['red'], [Looking, Walking, Eating, Hunting, Wandering], {}, bear);
-var sparrow = new Species('Wróbel', ['brown'], [Walking, Looking, RunningAway, FromWalls, Mating, Herding, FromOthers, Eating, Grazing, Wandering], {'Walking': [10, 2]}, bear);
+var sparrow = new Species('Wróbel', ['brown'], [Walking, Looking, RunningAway, FromWalls, Mating, Herding, FromOthers, Eating, Grazing, Wandering], {'Walking': {topSpeed: 10, agility: 0.6}}, bear);
 var species = [wolf, deer, bear, sparrow];
 var root = deer;
 
@@ -71,7 +71,10 @@ var Cell = function(pos, color, aspectTypes, aspectArguments){
 	this.aspects = {};
 	this.aspectList = [];
 	for(var i=0; i<this.aspectTypes.length; i++) {
-		var aspect = loadAspect(this, this.aspectTypes[i], aspectArguments[this.aspectTypes[i].name]);
+		var args = aspectArguments[this.aspectTypes[i].name];
+		if(args === undefined)
+			args = {};
+		var aspect = loadAspect(this, this.aspectTypes[i], args);
 		this.aspects[this.aspectTypes[i].name] = aspect;
 		this.aspectList.push(aspect);
 	}
