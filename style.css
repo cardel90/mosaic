@@ -24,3 +24,16 @@ canvas {
     outline-width: 2px;
 	outline-offset: 1px;
 }
+
+.showtab  {
+	background: white;
+	border: 1px solid grey;
+	border-radius: 5px 5px 0px 0px;
+	outline: none;
+	margin-bottom: -1px;
+	cursor: pointer;
+}
+
+.activetab {
+	border-bottom: 1px solid white;
+}

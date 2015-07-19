@@ -156,6 +156,9 @@ function changeTab(e) {
 function showTab(tabId) {
 	$('.tab').hide();
 	$('#'+tabId).show();
+	
+	$('.showtab').removeClass('activetab');
+	$('.showtab[data-tabid="'+tabId+'"]').addClass('activetab');
 }
 
 function initGui() {
