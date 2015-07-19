@@ -57,8 +57,9 @@ Mating.post = [Walking];
 Hunting.pre = [Eating];
 Hunting.post = [Walking];
 
-function loadAspect(cell, aspect) {
-	var result = new aspect();
+function loadAspect(cell, aspect, aspectArguments) {
+	var args = Array.prototype.slice.call(arguments, 2);
+	var result = new (Function.prototype.bind.call(aspect, aspectArguments));
 	result.cell = cell;
 	return result;
 }
@@ -488,10 +489,12 @@ Looking.prototype.report = function() {
 	return [this.seen.length];
 }
 
-function Walking() {
+function Walking(topSpeed, agility) {
 	this.velocity = new Vector(0, 0);
 	this.force = new Vector(0, 0);
 	this.forceCount = 0;
+	this.topSpeed = topSpeed ? topSpeed : 2;
+	this.agility = agility ? agility : 0.2;
 }
 
 Walking.prototype.applyForce = function(f) {
@@ -510,10 +513,10 @@ Walking.prototype.perform = function() {
 	if(this.forceCount > 0)
 		desired = desired.plus(this.force.scale(2/this.forceCount));
 	
-	desired = desired.capLength(2);
+	desired = desired.capLength(this.topSpeed);
 	
 	desired = desired.scale(0.6*(20-this.cell.getSize())/20 + 0.7);
-	this.velocity = this.velocity.plus(desired.minus(this.velocity).scale(0.3));
+	this.velocity = this.velocity.plus(desired.minus(this.velocity).scale(this.agility));
 	
 	// for legacy
 	this.cell.velocity = this.velocity;

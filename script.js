@@ -20,10 +20,11 @@ Water.prototype.draw = function(ctx) {
 	ctx.fill();
 }
 
-function Species(name, colors, aspectTypes, ancestor) {
+function Species(name, colors, aspectTypes, aspectArguments, ancestor) {
 	this.name = name;
 	this.colors = colors;
 	this.aspectTypes = sortAspects(aspectTypes);
+	this.aspectArguments = aspectArguments;
 	this.ancestor = ancestor;
 	this.children = [];
 	if(ancestor)
@@ -32,17 +33,18 @@ function Species(name, colors, aspectTypes, ancestor) {
 
 Species.prototype.makeCell = function(position) {
 	var color = this.colors[Math.floor(Math.random()*this.colors.length)];
-	var ncell = new Cell(position, color, this.aspectTypes);
+	var ncell = new Cell(position, color, this.aspectTypes, this.aspectArguments);
 	ncell.species = this;
 	ncell.cells = cells;
 	cells.push(ncell);
 	return ncell;
 }
 
-var deer = new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering]);
-var bear = new Species('Niedźwiedź', ['teal'], [Looking, FromWalls, Walking, Eating, Grazing, Hunting, Wandering], deer);
-var wolf = new Species('Wilk', ['red'], [Looking, Walking, Eating, Hunting, Wandering], bear);
-var species = [wolf, deer, bear];
+var deer = new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering], {});
+var bear = new Species('Niedźwiedź', ['teal'], [Looking, FromWalls, Walking, Eating, Grazing, Hunting, Wandering], {}, deer);
+var wolf = new Species('Wilk', ['red'], [Looking, Walking, Eating, Hunting, Wandering], {}, bear);
+var sparrow = new Species('Wróbel', ['brown'], [Walking, Looking, RunningAway, FromWalls, Mating, Herding, FromOthers, Eating, Grazing, Wandering], {'Walking': [10, 2]}, bear);
+var species = [wolf, deer, bear, sparrow];
 var root = deer;
 
 function Food(position, amount) {
@@ -59,7 +61,7 @@ Food.prototype.draw = function(ctx) {
 	ctx.fill();
 }
 
-var Cell = function(pos, color, aspectTypes){
+var Cell = function(pos, color, aspectTypes, aspectArguments){
 	this.position = pos;
 	this.velocity = new Vector(0, 0);
 	this.color = color;
@@ -69,7 +71,7 @@ var Cell = function(pos, color, aspectTypes){
 	this.aspects = {};
 	this.aspectList = [];
 	for(var i=0; i<this.aspectTypes.length; i++) {
-		var aspect = loadAspect(this, this.aspectTypes[i]);
+		var aspect = loadAspect(this, this.aspectTypes[i], aspectArguments[this.aspectTypes[i].name]);
 		this.aspects[this.aspectTypes[i].name] = aspect;
 		this.aspectList.push(aspect);
 	}
