@@ -153,11 +153,9 @@ function makeTree(sp) {
 	var $result = $('<div>');
 	$result.attr('class', 'node');
 	$result.append(sp.name);
-	for(var i=0; i<species.length; i++) {
-		if(species[i].ancestor === sp) {
-			var $child = makeTree(species[i]);
-			$result.append($child);
-		}
+	for(var i=0; i<sp.children.length; i++) {
+		var $child = makeTree(sp.children[i]);
+		$result.append($child);
 	}
 	return $result;
 }

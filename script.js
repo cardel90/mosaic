@@ -25,6 +25,9 @@ function Species(name, colors, aspectTypes, ancestor) {
 	this.colors = colors;
 	this.aspectTypes = sortAspects(aspectTypes);
 	this.ancestor = ancestor;
+	this.children = [];
+	if(ancestor)
+		ancestor.children.push(this);
 }
 
 Species.prototype.makeCell = function(position) {
