@@ -71,10 +71,7 @@ var Cell = function(pos, color, aspectTypes, aspectArguments){
 	this.aspects = {};
 	this.aspectList = [];
 	for(var i=0; i<this.aspectTypes.length; i++) {
-		var args = aspectArguments[this.aspectTypes[i].name];
-		if(args === undefined)
-			args = {};
-		var aspect = loadAspect(this, this.aspectTypes[i], args);
+		var aspect = loadAspect(this, this.aspectTypes[i], aspectArguments[this.aspectTypes[i].name]);
 		this.aspects[this.aspectTypes[i].name] = aspect;
 		this.aspectList.push(aspect);
 	}
