@@ -294,6 +294,10 @@ function Herding() {
 	this.vector = new Vector(0, 0);
 }
 
+Herding.defaults = {
+	strength: 1
+};
+
 Herding.prototype.prepare = function() {
 	var vel = new Vector(0, 0);
 	var loc = new Vector(0, 0);
@@ -313,7 +317,7 @@ Herding.prototype.prepare = function() {
 };
 
 Herding.prototype.perform = function() {
-	this.cell.getAspect(Walking).applyForce(this.vector);
+	this.cell.getAspect(Walking).applyForce(this.vector.scale(this.strength));
 };
 
 function Grazing() {
@@ -384,9 +388,6 @@ function Wandering() {
 	this.target = Vector.random(25, 25, width-50, height-50);
 }
 
-Wandering.prototype.prepare = function() {
-}
-
 Wandering.prototype.perform = function() {
 	if(Math.random()<0.001 || this.target.distance(this.cell.position)<10)
 		this.target = Vector.random(25, 25, width-50, height-50);
@@ -433,10 +434,13 @@ Eating.prototype.report = function() {
 }
 
 function Looking() {
-	this.angle = Math.PI*3/4;
-	this.range = 100;
 	this.seen = [];
 }
+
+Looking.defaults = {
+	angle: Math.PI*3/4,
+	range: 100
+};
 
 function canvas_arrow(context, fromx, fromy, tox, toy){
     var headlen = 10;   // length of head in pixels
