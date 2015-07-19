@@ -20,10 +20,11 @@ Water.prototype.draw = function(ctx) {
 	ctx.fill();
 }
 
-function Species(name, colors, aspectTypes) {
+function Species(name, colors, aspectTypes, ancestor) {
 	this.name = name;
 	this.colors = colors;
 	this.aspectTypes = sortAspects(aspectTypes);
+	this.ancestor = ancestor;
 }
 
 Species.prototype.makeCell = function(position) {
@@ -35,11 +36,10 @@ Species.prototype.makeCell = function(position) {
 	return ncell;
 }
 
-var species = [
-	new Species('Wilk', ['red'], [Looking, Walking, Eating, Hunting, Wandering]),
-	new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering]),
-	new Species('Niedźwiedź', ['teal'], [Looking, FromWalls, Walking, Eating, Grazing, Hunting, Wandering])
-];
+var bear = new Species('Niedźwiedź', ['teal'], [Looking, FromWalls, Walking, Eating, Grazing, Hunting, Wandering]);
+var wolf = new Species('Wilk', ['red'], [Looking, Walking, Eating, Hunting, Wandering], bear);
+var deer = new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering], bear);
+var species = [wolf, deer, bear];
 
 function Food(position, amount) {
 	this.position = position;
