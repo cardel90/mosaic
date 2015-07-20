@@ -105,6 +105,10 @@ Cell.prototype.getAspect = function(a) {
 	return this.aspects[a.name];
 }
 
+Cell.prototype.hasAspect = function(a) {
+	return (a.name in this.aspects);
+}
+
 Cell.prototype.sim = function() {
 
 	for(var i=0; i<this.aspectList.length; i++) {

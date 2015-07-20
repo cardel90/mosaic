@@ -92,10 +92,15 @@ FromWater.prototype.perform = function() {
 function RunningAway() {
 }
 
+RunningAway.defaults = {
+	speedThreshold: 1,
+	angleThreshold: 0.5
+};
+
 RunningAway.prototype.prepare = function() {
 	this.hunter = undefined;
 	var tcell = this.cell;
-	var tab = this.cell.nearestCells(function(c){return c.color==='red' && c.distance(tcell)<200;});
+	var tab = this.cell.nearestCells(function(c){return c.hasAspect(Hunting) && c.distance(tcell)<200;});
 	var n = tab.length;
 	for(var i=0; i<n; i++) {
 		var c = tab[i];
