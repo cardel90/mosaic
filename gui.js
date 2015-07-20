@@ -11,7 +11,8 @@ Wandering.prototype.color = 'lightgrey';
 Looking.prototype.color = 'lightblue';
 Herding.prototype.color = 'brown';
 Eating.prototype.color = 'yellow';
-Walking.prototype.color = 'lightgreen';
+Walking.prototype.color = 'orange';
+Photosynthesis.prototype.color = 'lightgreen';
 
 Cell.prototype.draw = function(ctx) {
 	ctx.strokeStyle = 'black';

@@ -45,7 +45,7 @@ function sortAspects(aspects) {
 	return result;
 }
 
-var allAspects = [Looking, RunningAway, Eating, Hunting, Grazing, Herding, Mating, Wandering, Walking, FromOthers, FromWater, FromWalls];
+var allAspects = [Looking, RunningAway, Eating, Photosynthesis, Hunting, Grazing, Herding, Mating, Wandering, Walking, FromOthers, FromWater, FromWalls];
 
 Wandering.post = [Walking];
 RunningAway.post = [Walking];
@@ -493,6 +493,14 @@ Looking.prototype.perform = function() {
 
 Looking.prototype.report = function() {
 	return [this.seen.length];
+}
+
+function Photosynthesis() {
+}
+
+Photosynthesis.prototype.perform = function() {
+	var eating = this.cell.getAspect(Eating);
+	eating.feed(eating.hunger);
 }
 
 function Walking(args) {
