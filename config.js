@@ -8,20 +8,36 @@ Config.prototype.get = function(name) {
 
 Config.prototype.set = function(name, value) {
 	this.params[name].value = value;
+	localStorage.setItem(name, value);
 }
 
 Config.prototype.add = function(param) {
 	this.params[param.name] = param;
-	param.makeInput();
+	$('#configuration').append(param.makeInput());
 }
 
-function ConfigParam(name, type, params, value, description) {
+function ConfigParam(name, type, params, defaultValue, description) {
 	this.name = name;
-	this.value = value;
 	this.type = type;
 	this.params = params;
 	this.description = description;
+	var value = localStorage.getItem(name);
+	if(value) {
+		switch(type) {
+			case 'int':
+				this.value = +value;
+				break;
+			case 'bool':
+				this.value = value=='true' ? true : false;
+				break;
+			default:
+				this.value = value;
+		}
+	}
+	else
+		this.value = defaultValue;
 }
+
 /*
  * Example result:
 <label for="plants">Plant amount</label>
@@ -56,7 +72,7 @@ ConfigParam.prototype.makeInput = function() {
 	$result.append($label).append($input);
 	
 	this.toInput($input);
-	$('#configuration').append($result);
+	return $result;
 }
 
 ConfigParam.prototype.fromInput = function($input) {
@@ -67,6 +83,7 @@ ConfigParam.prototype.fromInput = function($input) {
 		default:
 			this.value = $input.val();
 	}
+	localStorage.setItem(this.name, this.value);
 }
 
 ConfigParam.prototype.toInput = function($input) {
