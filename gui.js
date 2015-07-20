@@ -1,4 +1,3 @@
-var speed = 20;
 var canvas;
 var interval;
 var selected;
@@ -25,12 +24,14 @@ Cell.prototype.draw = function(ctx) {
 		ctx.closePath();
 	}
 	
-	// draw aspects with no priority and the top one
-	for(var i=0; i<this.aspectList.length; i++) {
-		var a = this.aspectList[i];
-		if(a.draw) {
-			if(!a.priority || a===this.top) {
-				a.draw(ctx);
+	if(config.get('draw-aspects')) {
+		// draw aspects with no priority and the top one
+		for(var i=0; i<this.aspectList.length; i++) {
+			var a = this.aspectList[i];
+			if(a.draw) {
+				if(!a.priority || a===this.top) {
+					a.draw(ctx);
+				}
 			}
 		}
 	}
@@ -59,7 +60,7 @@ function repaint() {
 function play() {
 	if(interval === undefined) {
 		$('#play').text('Stop');
-		interval = setInterval(update, speed);
+		interval = setInterval(update, 200-2*config.get('sim-speed'));
 	} else {
 		clearInterval(interval);
 		interval = undefined;
@@ -67,18 +68,9 @@ function play() {
 	}
 }
 
-function changeSpeed() {
-	var v = $('#speed').val();
-	speed = 100-v;
-	if(interval !== undefined) {
-		play();
-		play();
-	}
-}
-
-function plants() {
-	var v = $('#plants').val();
-	growth = v;
+function restart() {
+	play();
+	play();
 }
 
 function cellAside(cell) {
@@ -165,16 +157,17 @@ function initGui() {
 	canvas = $('canvas').get(0);
 	
 	$('#play').click(play);
-	$('#plants').change(plants);
-	$('#speed').change(changeSpeed);
 	$('#canvas').click(click);
 	$('.showtab').click(changeTab);
 	$('#add').click(addCell);
+
+	config.add(new ConfigParam('sim-speed', 'int', {min:0, max:100}, 70, 'Simulation speed', restart));
+	config.add(new ConfigParam('plant-growth', 'int', {min:0, max:100}, 20, 'Amount of plants'));
+	config.add(new ConfigParam('max-cells', 'int', {min:0, max:100}, 70, 'Max number of cells'));
+	config.add(new ConfigParam('draw-aspects', 'bool', {}, true, 'Draw aspect lines'));
 	
 	listSpecies();
 
-	changeSpeed();
-	plants();
 	play();
 	
 	showTab('simulation');

@@ -7,6 +7,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 	<script src="vector.js"></script>
 	<script src="aspects.js"></script> 
+	<script src="config.js"></script>
 	<script src="script.js"></script>
 	<script src="gui.js"></script> 
 	<link rel="stylesheet" type="text/css" href="style.css">
@@ -16,16 +17,13 @@
 	<nav>
 		<button class="showtab" data-tabid="simulation">Sim</button>
 		<button class="showtab" data-tabid="species">Species</button>
+		<button class="showtab" data-tabid="configuration">Config</button>
 	</nav>
 	
 	<div id="simulation" class="tab">
 		<div id="sidebox">
 			<div id="controls">
 				<button id="play">Play</button><br>
-				<label for="speed">Speed</label>
-				<input id="speed" type="range" min="0" max="100" step="1" value="70" /><br>
-				<label for="plants">Plant amount</label>
-				<input id="plants" type="range" min="0" max="500" step="1" value="50" />
 			</div>
 			<div id="adder">
 				<select></select>
@@ -40,7 +38,9 @@
 	</div>
 	
 	<div id="species" class="tab">
-	Species
+	</div>
+	
+	<div id="configuration" class="tab">
 	</div>
 	
 </body>

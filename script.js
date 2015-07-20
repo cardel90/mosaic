@@ -3,7 +3,6 @@ var height;
 var cells = [];
 var colors = ['yellow', 'blue'];
 var food = [];
-var growth = 0.5;
 var waters = [];
 
 function Water(position, radius) {
@@ -138,10 +137,12 @@ function update() {
 	if(cells.length > 1000 || food.length > 10000)
 		return;
 
-	if(food.length<growth)
+	if(food.length<config.get('plant-growth'))
 		food.push(new Food(Vector.random(25, 25, width-50, height-50), Math.random()*10+1));
-	if(food.length>growth)
+	if(food.length>config.get('plant-growth'))
 		food.splice(0,1);
+	if(cells.length>config.get('max-cells'))
+		cells.splice(cells.length-1);
 
 	for(var i=cells.length-1; i>=0; i--) {
 		var cell = cells[i];
