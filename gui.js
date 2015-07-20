@@ -109,6 +109,7 @@ function click(e) {
 			break;
 		}
 	}
+	repaint();
 }
 
 function addCell() {
