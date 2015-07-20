@@ -45,6 +45,7 @@ canvas {
 }
 
 .aspect {
+	padding: 2px;
 	border: 1px solid black;
 	color: black;
 	width: 500px;

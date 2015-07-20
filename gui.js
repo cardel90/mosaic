@@ -5,7 +5,7 @@ var selected;
 
 Mating.prototype.color = 'pink';
 Hunting.prototype.color = 'red';
-RunningAway.prototype.color = 'purple';
+RunningAway.prototype.color = 'violet';
 Grazing.prototype.color = 'green';
 Wandering.prototype.color = 'lightgrey';
 Looking.prototype.color = 'lightblue';
@@ -190,7 +190,7 @@ function makeCreator() {
 			$(this).parent().toggleClass('aspect-selected');
 		});
 		$div.append($checkbox);
-		$div.append(aspect.name);
+		$div.append($('<label>').attr('for', aspect.name+'-selected').text(aspect.name));
 		for(var j in aspect.defaults) {
 			var $label = $('<label>').text(j);
 			$label.attr('for', aspect.name+'-'+j);
