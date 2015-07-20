@@ -3,12 +3,11 @@ function Config() {
 }
 
 Config.prototype.get = function(name) {
-	return this.params[name].value;
+	return this.params[name].get();
 }
 
 Config.prototype.set = function(name, value) {
-	this.params[name].value = value;
-	localStorage.setItem(name, value);
+	this.params[name].set(value);
 }
 
 Config.prototype.add = function(param) {
@@ -36,6 +35,15 @@ function ConfigParam(name, type, params, defaultValue, description) {
 	}
 	else
 		this.value = defaultValue;
+}
+
+ConfigParam.prototype.set = function(val) {
+	this.value = val;
+	localStorage.setItem(this.name, this.value);
+}
+
+ConfigParam.prototype.get = function() {
+	return this.value;
 }
 
 /*
@@ -76,14 +84,18 @@ ConfigParam.prototype.makeInput = function() {
 }
 
 ConfigParam.prototype.fromInput = function($input) {
+	var val;
 	switch(this.type) {
 		case 'bool':
-			this.value = $input.is(':checked');
+			val = $input.is(':checked');
+			break;
+		case 'int':
+			val = +($input.val());
 			break;
 		default:
-			this.value = $input.val();
+			val = $input.val();
 	}
-	localStorage.setItem(this.name, this.value);
+	this.set(val);
 }
 
 ConfigParam.prototype.toInput = function($input) {
@@ -95,6 +107,5 @@ ConfigParam.prototype.toInput = function($input) {
 			$input.val(this.value);
 	}
 }
-
 
 var config = new Config();
