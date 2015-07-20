@@ -15,11 +15,13 @@ Config.prototype.add = function(param) {
 	$('#configuration').append(param.makeInput());
 }
 
-function ConfigParam(name, type, params, defaultValue, description) {
+// hook will be called on change with ConfigParam as argument
+function ConfigParam(name, type, params, defaultValue, description, hook) {
 	this.name = name;
 	this.type = type;
 	this.params = params;
 	this.description = description;
+	this.hook = hook;
 	var value = localStorage.getItem(name);
 	if(value) {
 		switch(type) {
@@ -40,6 +42,8 @@ function ConfigParam(name, type, params, defaultValue, description) {
 ConfigParam.prototype.set = function(val) {
 	this.value = val;
 	localStorage.setItem(this.name, this.value);
+	if(this.hook)
+		this.hook(this);
 }
 
 ConfigParam.prototype.get = function() {

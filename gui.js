@@ -1,4 +1,3 @@
-var speed = 20;
 var canvas;
 var interval;
 var selected;
@@ -61,7 +60,7 @@ function repaint() {
 function play() {
 	if(interval === undefined) {
 		$('#play').text('Stop');
-		interval = setInterval(update, speed);
+		interval = setInterval(update, 200-2*config.get('sim-speed'));
 	} else {
 		clearInterval(interval);
 		interval = undefined;
@@ -69,13 +68,9 @@ function play() {
 	}
 }
 
-function changeSpeed() {
-	var v = $('#speed').val();
-	speed = 100-v;
-	if(interval !== undefined) {
-		play();
-		play();
-	}
+function restart() {
+	play();
+	play();
 }
 
 function cellAside(cell) {
@@ -159,17 +154,16 @@ function initGui() {
 	canvas = $('canvas').get(0);
 	
 	$('#play').click(play);
-	$('#speed').change(changeSpeed);
 	$('#canvas').click(click);
 	$('.showtab').click(changeTab);
 	$('#add').click(addCell);
 
+	config.add(new ConfigParam('sim-speed', 'int', {min:0, max:100}, 70, 'Simulation speed', restart));
 	config.add(new ConfigParam('plant-growth', 'int', {min:0, max:100}, 20, 'Amount of plants'));
 	config.add(new ConfigParam('draw-aspects', 'bool', {}, true, 'Draw aspect lines'));
 	
 	listSpecies();
 
-	changeSpeed();
 	play();
 	
 	showTab('simulation');
