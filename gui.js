@@ -176,6 +176,10 @@ function makeCreator() {
 	for(var i=0; i<species.length; i++)
 		$select.append($('<option>').text(species[i].name));
 	$result.append($select);
+	$result.append('<br>');
+	$result.append($('<label>').attr('for', 'species-color').text('Species color'));
+	$result.append($('<input>').attr('id', 'species-color').attr('type', 'color'));
+	$result.append('<br>');
 	for(var i=0; i<allAspects.length; i++) {
 		var aspect = allAspects[i];
 		var $div = $('<div>');
@@ -226,7 +230,7 @@ function createSpecies() {
 			break;
 		}
 	}
-	var sp = new Species($('#species-name').val(), ['lime'], aspectTypes, aspectArguments, ancestor);
+	var sp = new Species($('#species-name').val(), [$('#species-color').val()], aspectTypes, aspectArguments, ancestor);
 	species.push(sp);
 	
 	listSpecies();
