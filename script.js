@@ -141,6 +141,8 @@ function update() {
 		food.push(new Food(Vector.random(25, 25, width-50, height-50), Math.random()*10+1));
 	if(food.length>config.get('plant-growth'))
 		food.splice(0,1);
+	if(cells.length>config.get('max-cells'))
+		cells.splice(cells.length-1);
 
 	for(var i=cells.length-1; i>=0; i--) {
 		var cell = cells[i];
