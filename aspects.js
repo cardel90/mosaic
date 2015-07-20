@@ -45,7 +45,7 @@ function sortAspects(aspects) {
 	return result;
 }
 
-var allAspects = [FromWater, Hunting, Walking, Looking, RunningAway, FromWalls, Mating, Herding, FromOthers, Eating, Grazing, Wandering];
+var allAspects = [Looking, RunningAway, Eating, Hunting, Grazing, Herding, Mating, Wandering, Walking, FromOthers, FromWater, FromWalls];
 
 Wandering.post = [Walking];
 RunningAway.post = [Walking];

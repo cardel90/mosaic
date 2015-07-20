@@ -5,9 +5,13 @@ var selected;
 
 Mating.prototype.color = 'pink';
 Hunting.prototype.color = 'red';
-RunningAway.prototype.color = 'yellow';
+RunningAway.prototype.color = 'purple';
 Grazing.prototype.color = 'green';
 Wandering.prototype.color = 'lightgrey';
+Looking.prototype.color = 'lightblue';
+Herding.prototype.color = 'brown';
+Eating.prototype.color = 'yellow';
+Walking.prototype.color = 'lightgreen';
 
 Cell.prototype.draw = function(ctx) {
 	ctx.strokeStyle = 'black';
@@ -162,10 +166,21 @@ function makeTree(sp) {
 }
 
 function makeCreator() {
+	$('species-creator').text('');
 	$result = $('<div>');
+	$result.append($('<label>').attr('for', 'species-name').text('Species name'));
+	$result.append($('<input>').attr('id', 'species-name'));
+	$result.append('<br>');
+	$result.append($('<label>').attr('for', 'ancestor').text('Ancestor'));
+	var $select = $('<select>').attr('id', 'ancestor');
+	for(var i=0; i<species.length; i++)
+		$select.append($('<option>').text(species[i].name));
+	$result.append($select);
 	for(var i=0; i<allAspects.length; i++) {
 		var aspect = allAspects[i];
 		var $div = $('<div>');
+		var color = aspect.prototype.color ? aspect.prototype.color : 'grey';
+		$div.css('background-color', color);
 		$div.addClass('aspect');
 		$div.attr('id', aspect.name+'-div');
 		var $checkbox = $('<input>');
@@ -186,6 +201,7 @@ function makeCreator() {
 		}
 		$result.append($div).append('<br>');
 	}
+	$result.append($('<button>').text('Create').click(createSpecies));
 	$('#species-creator').prepend($result);
 }
 
@@ -203,7 +219,14 @@ function createSpecies() {
 			aspectArguments[aspect.name] = args;
 		}
 	}
-	var sp = new Species($('#species-name').val(), ['lime'], aspectTypes, aspectArguments, root);
+	var ancestor = root;
+	for(var i=0; i<species.length; i++) {
+		if(species[i].name === $('#ancestor').val()) {
+			ancestor = species[i];
+			break;
+		}
+	}
+	var sp = new Species($('#species-name').val(), ['lime'], aspectTypes, aspectArguments, ancestor);
 	species.push(sp);
 	
 	listSpecies();
@@ -236,7 +259,6 @@ function initGui() {
 	listSpecies();
 	$('#taxonomy').text('').append(makeTree(root));
 	makeCreator();
-	$('#create').click(createSpecies);
 
 	changeSpeed();
 	plants();

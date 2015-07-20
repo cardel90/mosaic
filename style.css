@@ -45,12 +45,12 @@ canvas {
 }
 
 .aspect {
-	border: 1px solid grey;
+	border: 1px solid black;
+	color: black;
 	width: 500px;
-	color: grey;
+	opacity: 0.5;
 }
 
 .aspect-selected {
-	border: 1px solid black;
-	color: black;
+	opacity: 1;
 }
