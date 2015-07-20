@@ -119,6 +119,7 @@ function addCell() {
 			selected = species[i].makeCell(Vector.random(25, 25, width-50, height-50));
 		}
 	}
+	repaint();
 }
 
 function listSpecies() {
