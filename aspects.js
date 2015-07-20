@@ -58,6 +58,7 @@ Herding.post = [Walking];
 Mating.post = [Walking];
 Hunting.pre = [Eating];
 Hunting.post = [Walking];
+Photosynthesis.pre = [Eating];
 
 function loadAspect(cell, aspect, aspectArguments) {
 	var result = new (Function.prototype.bind.call(aspect));
@@ -421,7 +422,7 @@ function Eating() {
 }
 
 Eating.prototype.perform = function() {	
-	this.fat -= (Math.random()*0.02);
+	this.fat -= (Math.random()*0.002)*this.fat;
 	
 	if(this.fat < 10)
 		this.hunger += (10-this.fat)/10;
@@ -505,7 +506,7 @@ function Photosynthesis() {
 
 Photosynthesis.prototype.perform = function() {
 	var eating = this.cell.getAspect(Eating);
-	eating.feed(eating.hunger);
+	eating.feed(0.02);
 }
 
 function Walking(args) {

@@ -82,7 +82,8 @@ Cell.prototype.getSize = function() {
 }
 
 Cell.prototype.makeChild = function(position) {
-	this.species.makeCell(this.position.plus(new Vector(20, 20)));
+	var ncell = this.species.makeCell(this.position.plus(new Vector(20, 20)));
+	ncell.fat = ncell.getAspect(Eating).fat = this.getAspect(Eating).fat/2;
 }
 
 Cell.prototype.vectorTo = function(other) {
