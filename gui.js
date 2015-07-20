@@ -4,9 +4,14 @@ var selected;
 
 Mating.prototype.color = 'pink';
 Hunting.prototype.color = 'red';
-RunningAway.prototype.color = 'yellow';
+RunningAway.prototype.color = 'violet';
 Grazing.prototype.color = 'green';
 Wandering.prototype.color = 'lightgrey';
+Looking.prototype.color = 'lightblue';
+Herding.prototype.color = 'brown';
+Eating.prototype.color = 'yellow';
+Walking.prototype.color = 'orange';
+Photosynthesis.prototype.color = 'lightgreen';
 
 Cell.prototype.draw = function(ctx) {
 	ctx.strokeStyle = 'black';
@@ -124,6 +129,7 @@ function addCell() {
 
 function listSpecies() {
 	$('#species').text('');
+	$('#adder select').text('');
 	for(var i=0; i<species.length; i++) {
 		var s = species[i];
 		var node = $('<div>');
@@ -140,6 +146,90 @@ function listSpecies() {
 		$('#species').append(node);
 		$('#adder select').append(option);
 	}
+}
+
+function makeTree(sp) {
+	if(!sp) return;
+	var $result = $('<div>');
+	$result.attr('class', 'node');
+	$result.append(sp.name);
+	for(var i=0; i<sp.children.length; i++) {
+		var $child = makeTree(sp.children[i]);
+		$result.append($child);
+	}
+	return $result;
+}
+
+function makeCreator() {
+	$('species-creator').text('');
+	$result = $('<div>');
+	$result.append($('<label>').attr('for', 'species-name').text('Species name'));
+	$result.append($('<input>').attr('id', 'species-name'));
+	$result.append('<br>');
+	$result.append($('<label>').attr('for', 'ancestor').text('Ancestor'));
+	var $select = $('<select>').attr('id', 'ancestor');
+	for(var i=0; i<species.length; i++)
+		$select.append($('<option>').text(species[i].name));
+	$result.append($select);
+	$result.append('<br>');
+	$result.append($('<label>').attr('for', 'species-color').text('Species color'));
+	$result.append($('<input>').attr('id', 'species-color').attr('type', 'color'));
+	$result.append('<br>');
+	for(var i=0; i<allAspects.length; i++) {
+		var aspect = allAspects[i];
+		var $div = $('<div>');
+		var color = aspect.prototype.color ? aspect.prototype.color : 'grey';
+		$div.css('background-color', color);
+		$div.addClass('aspect');
+		$div.attr('id', aspect.name+'-div');
+		var $checkbox = $('<input>');
+		$checkbox.attr('type', 'checkbox');
+		$checkbox.attr('id', aspect.name+'-selected');
+		$checkbox.click(function(){
+			$(this).parent().toggleClass('aspect-selected');
+		});
+		$div.append($checkbox);
+		$div.append($('<label>').attr('for', aspect.name+'-selected').text(aspect.name));
+		for(var j in aspect.defaults) {
+			var $label = $('<label>').text(j);
+			$label.attr('for', aspect.name+'-'+j);
+			var $input = $('<input>');
+			$input.attr('id', aspect.name+'-'+j);
+			$input.val(aspect.defaults[j]);
+			$div.append('<br>').append($label).append($input);
+		}
+		$result.append($div).append('<br>');
+	}
+	$result.append($('<button>').text('Create').click(createSpecies));
+	$('#species-creator').prepend($result);
+}
+
+function createSpecies() {
+	var aspectTypes = [];
+	var aspectArguments = {};
+	for(var i=0; i<allAspects.length; i++) {
+		var aspect = allAspects[i];
+		if($('#'+aspect.name+'-selected').is(':checked')) {
+			aspectTypes.push(aspect);
+			var args = {};
+			for(var j in aspect.defaults) {
+				args[j] = $('#'+aspect.name+'-'+j).val();
+			}
+			aspectArguments[aspect.name] = args;
+		}
+	}
+	var ancestor = root;
+	for(var i=0; i<species.length; i++) {
+		if(species[i].name === $('#ancestor').val()) {
+			ancestor = species[i];
+			break;
+		}
+	}
+	var sp = new Species($('#species-name').val(), [$('#species-color').val()], aspectTypes, aspectArguments, ancestor);
+	species.push(sp);
+	
+	listSpecies();
+	$('#taxonomy').text('').append(makeTree(root));
 }
 
 function changeTab(e) {
@@ -169,8 +259,10 @@ function initGui() {
 	config.add(new ConfigParam('draw-aspects', 'bool', {}, true, 'Draw aspect lines'));
 	
 	listSpecies();
+	$('#taxonomy').text('').append(makeTree(root));
+	makeCreator();
 
 	play();
 	
-	showTab('simulation');
+	showTab('species-creator');
 }

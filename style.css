@@ -1,6 +1,7 @@
 .tab {
 	border: 1px solid grey;
 	display: none;
+	padding: 5px;
 }
 
 canvas { 
@@ -25,6 +26,11 @@ canvas {
 	outline-offset: 1px;
 }
 
+.node {
+	border-left: 1px solid black;
+	margin-left: 5px;
+}
+
 .showtab  {
 	background: white;
 	border: 1px solid grey;
@@ -36,4 +42,16 @@ canvas {
 
 .activetab {
 	border-bottom: 1px solid white;
+}
+
+.aspect {
+	padding: 2px;
+	border: 1px solid black;
+	color: black;
+	width: 500px;
+	opacity: 0.5;
+}
+
+.aspect-selected {
+	opacity: 1;
 }

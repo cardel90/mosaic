@@ -45,6 +45,8 @@ function sortAspects(aspects) {
 	return result;
 }
 
+var allAspects = [Looking, RunningAway, Fission, Mating, Eating, Photosynthesis, Hunting, Grazing, Herding, Wandering, Walking, FromOthers, FromWater, FromWalls];
+
 Wandering.post = [Walking];
 RunningAway.post = [Walking];
 Grazing.post = [Walking];
@@ -56,13 +58,16 @@ Herding.post = [Walking];
 Mating.post = [Walking];
 Hunting.pre = [Eating];
 Hunting.post = [Walking];
+Photosynthesis.pre = [Eating];
 
-function loadAspect(cell, aspect) {
-	return new aspect(cell);
+function loadAspect(cell, aspect, aspectArguments) {
+	var result = new (Function.prototype.bind.call(aspect));
+	_.extend(result, aspect.defaults, aspectArguments);
+	result.cell = cell;
+	return result;
 }
 
-function FromWater(cell) {
-	this.cell = cell;
+function FromWater() {
 	this.v = new Vector(0, 0);
 }
 
@@ -85,14 +90,18 @@ FromWater.prototype.perform = function() {
 	this.cell.getAspect(Walking).applyForce(this.v.scale(2));
 };
 
-function RunningAway(cell) {
-	this.cell = cell;
+function RunningAway() {
 }
+
+RunningAway.defaults = {
+	speedThreshold: 1,
+	angleThreshold: 0.5
+};
 
 RunningAway.prototype.prepare = function() {
 	this.hunter = undefined;
 	var tcell = this.cell;
-	var tab = this.cell.nearestCells(function(c){return c.color==='red' && c.distance(tcell)<200;});
+	var tab = this.cell.nearestCells(function(c){return c.hasAspect(Hunting) && c.distance(tcell)<200;});
 	var n = tab.length;
 	for(var i=0; i<n; i++) {
 		var c = tab[i];
@@ -125,8 +134,7 @@ RunningAway.prototype.priority = function() {
 	return this.hunter === undefined ? 0 : 100;
 }
 
-function Hunting(cell) {
-	this.cell = cell;
+function Hunting() {
 }
 
 Hunting.prototype.findPrey = function() {
@@ -173,8 +181,7 @@ Hunting.prototype.report = function() {
 	return [this.priority()];
 }
 
-function Mating(cell) {
-	this.cell = cell;
+function Mating() {
 	this.horny = 0;
 }
 
@@ -224,8 +231,7 @@ Mating.prototype.report = function() {
 	return [this.cell.gender, this.horny];
 }
 
-function FromWalls(cell) {
-	this.cell = cell;
+function FromWalls() {
 	this.v = new Vector(0, 0);
 }
 
@@ -248,8 +254,7 @@ FromWalls.prototype.perform = function() {
 	this.cell.getAspect(Walking).applyForce(this.v.scale(5));
 };
 
-function FromOthers(cell) {
-	this.cell = cell;
+function FromOthers() {
 	this.vector = new Vector(0, 0);
 	this.tab = [];
 }
@@ -293,10 +298,13 @@ FromOthers.prototype.draw = function(ctx) {
 	}
 }
 
-function Herding(cell) {
-	this.cell = cell;
+function Herding() {
 	this.vector = new Vector(0, 0);
 }
+
+Herding.defaults = {
+	strength: 1
+};
 
 Herding.prototype.prepare = function() {
 	var vel = new Vector(0, 0);
@@ -317,11 +325,10 @@ Herding.prototype.prepare = function() {
 };
 
 Herding.prototype.perform = function() {
-	this.cell.getAspect(Walking).applyForce(this.vector);
+	this.cell.getAspect(Walking).applyForce(this.vector.scale(this.strength));
 };
 
-function Grazing(cell) {
-	this.cell = cell;
+function Grazing() {
 }
 
 Grazing.prototype.prepare = function() {
@@ -384,13 +391,9 @@ Grazing.prototype.report = function() {
 	return [this.priority()];
 }
 
-function Wandering(cell) {
-	this.cell = cell;
+function Wandering() {
 	this.speed = new Vector(0, 0);
 	this.target = Vector.random(25, 25, width-50, height-50);
-}
-
-Wandering.prototype.prepare = function() {
 }
 
 Wandering.prototype.perform = function() {
@@ -414,14 +417,13 @@ Wandering.prototype.priority = function() {
 	return 1;
 }
 
-function Eating(cell) {
-	this.cell = cell;
+function Eating() {
 	this.fat = 10;
 	this.hunger = 0;
 }
 
 Eating.prototype.perform = function() {	
-	this.fat -= (Math.random()*0.02);
+	this.fat -= (Math.random()*0.002)*this.fat;
 	
 	if(this.fat < 10)
 		this.hunger += (10-this.fat)/10;
@@ -440,12 +442,14 @@ Eating.prototype.report = function() {
 	return [this.fat, this.hunger];
 }
 
-function Looking(cell) {
-	this.cell = cell;
-	this.angle = Math.PI*3/4;
-	this.range = 100;
+function Looking() {
 	this.seen = [];
 }
+
+Looking.defaults = {
+	angle: Math.PI*3/4,
+	range: 100
+};
 
 function canvas_arrow(context, fromx, fromy, tox, toy){
     var headlen = 10;   // length of head in pixels
@@ -498,12 +502,24 @@ Looking.prototype.report = function() {
 	return [this.seen.length];
 }
 
-function Walking(cell) {
-	this.cell = cell;
+function Photosynthesis() {
+}
+
+Photosynthesis.prototype.perform = function() {
+	var eating = this.cell.getAspect(Eating);
+	eating.feed(0.02);
+}
+
+function Walking(args) {
 	this.velocity = new Vector(0, 0);
 	this.force = new Vector(0, 0);
 	this.forceCount = 0;
 }
+
+Walking.defaults = {
+	topSpeed: 2,
+	agility: 0.2
+};
 
 Walking.prototype.applyForce = function(f) {
 	this.force = this.force.plus(f);
@@ -521,10 +537,10 @@ Walking.prototype.perform = function() {
 	if(this.forceCount > 0)
 		desired = desired.plus(this.force.scale(2/this.forceCount));
 	
-	desired = desired.capLength(2);
+	desired = desired.capLength(this.topSpeed);
 	
 	desired = desired.scale(0.6*(20-this.cell.getSize())/20 + 0.7);
-	this.velocity = this.velocity.plus(desired.minus(this.velocity).scale(0.3));
+	this.velocity = this.velocity.plus(desired.minus(this.velocity).scale(this.agility));
 	
 	// for legacy
 	this.cell.velocity = this.velocity;
@@ -534,4 +550,19 @@ Walking.prototype.perform = function() {
 
 Walking.prototype.report = function() {
 	return [this.forceCount];
+}
+
+function Fission() {
+}
+
+Fission.defaults = {
+	threshold: 14
+};
+
+Fission.prototype.perform = function() {
+	var eating = this.cell.getAspect(Eating);
+	if(eating.fat > this.threshold) {
+		this.cell.makeChild(this.cell.position.plus(new Vector(15, 15)));
+		this.cell.fat = eating.fat = eating.fat/2;
+	}
 }
