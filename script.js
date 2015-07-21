@@ -75,11 +75,14 @@ Cell.prototype.distance = function(other) {
 	return other.position.minus(this.position).length();
 }
 
-Cell.prototype.nearestCells = function(condition) {
-	var result = cells.slice(0).filter(condition);
+Cell.prototype.nearestCells = function(maxDistance) {
 	var tcell = this;
-	var comparator = function(a, b){ return a.distance(tcell) - b.distance(tcell); };
-	result.sort(comparator);
+	var result = _.filter(cells, function(c){
+		return c.position.distance(tcell.position) <= maxDistance;
+	});
+	
+	//var comparator = function(a, b){ return a.distance(tcell) - b.distance(tcell); };
+	//result.sort(comparator);
 	return result;
 }
 

@@ -124,8 +124,12 @@ Hunting.prototype.findPrey = function() {
 	var tab = _.filter(this.cell.getAspect(Looking).seen, function(c){
 		return c.color != tcell.color;
 	});
-	if(tab.length > 0)
-		return tab[0];
+	if(tab.length > 0) {
+		var prey = _.min(tab, function(c){
+			return c.position.distance(tcell.position);
+		});
+		return prey;
+	}
 }
 
 Hunting.prototype.prepare = function() {
@@ -171,7 +175,9 @@ function Mating() {
 
 Mating.prototype.findMate = function() {
 	var tcell = this.cell;
-	var tab = this.cell.nearestCells(function(c){return c.species === tcell.species && c.gender !== tcell.gender;});
+	var tab = _.filter(this.cell.getAspect(Looking).seen, function(c) {
+		return c.species === tcell.species && c.gender !== tcell.gender;
+	});
 	if(tab.length > 0)
 		return tab[0];
 }
@@ -249,9 +255,7 @@ FromOthers.prototype.prepare = function() {
 	var y = 0;
 	
 	var tcell = this.cell;
-	this.tab = this.cell.nearestCells(function(c){
-		return c!==tcell && FromOthers.modifiedDistance(tcell, c)<15;
-	});
+	this.tab = this.cell.nearestCells(50);
 	
 	for(var i=0; i<this.tab.length; i++) {
 		var c = this.tab[i];
@@ -472,11 +476,7 @@ Looking.prototype.draw = function(ctx) {
 }
 
 Looking.prototype.perform = function() {
-	var tcell = this.cell;
-	var l = this;
-	this.seen = tcell.nearestCells(function(c){
-		return c.distance(tcell) < l.range;// && tcell.velocity.dot(c.position.minus(tcell.position)) > 0;
-	});
+	this.seen = this.cell.nearestCells(this.range);
 }
 
 Looking.prototype.report = function() {
