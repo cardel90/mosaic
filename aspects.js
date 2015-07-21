@@ -488,7 +488,7 @@ function Photosynthesis() {
 
 Photosynthesis.prototype.perform = function() {
 	var eating = this.cell.getAspect(Eating);
-	eating.feed(0.02);
+	eating.feed(1/(this.cell.position.distance(new Vector(width/2, height/2))+1));
 }
 
 function Walking(args) {
