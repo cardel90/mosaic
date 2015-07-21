@@ -45,7 +45,7 @@ function sortAspects(aspects) {
 	return result;
 }
 
-var allAspects = [Looking, RunningAway, Fission, Mating, Eating, Photosynthesis, Hunting, Grazing, Herding, Wandering, Walking, FromOthers, FromWater, FromWalls];
+var allAspects = [Looking, RunningAway, Fission, Mating, Eating, Photosynthesis, Hunting, Grazing, Herding, Wandering, Walking, FromOthers, FromWalls];
 
 Wandering.post = [Walking];
 RunningAway.post = [Walking];
@@ -53,7 +53,6 @@ Grazing.post = [Walking];
 Grazing.pre = [Eating];
 FromOthers.post = [Walking];
 FromWalls.post = [Walking];
-FromWater.post = [Walking];
 Herding.pre = [Looking];
 Herding.post = [Walking];
 Mating.pre = [Looking];
@@ -70,29 +69,6 @@ function loadAspect(cell, aspect, aspectArguments) {
 	result.cell = cell;
 	return result;
 }
-
-function FromWater() {
-	this.v = new Vector(0, 0);
-}
-
-FromWater.prototype.prepare = function() {
-	var p = this.cell.position;
-	var v = new Vector(0, 0);
-	
-	for(var i=0; i<waters.length; i++) {
-		var w = waters[i];
-		var d = w.position.distance(p) - w.radius;
-		if(d < 2*this.cell.getSize()) {
-			v = v.plus(p.minus(w.position).scale(1/w.radius).scale(1/(d*d)));
-		}
-	}
-	
-	this.v = v;
-};
-
-FromWater.prototype.perform = function() {
-	this.cell.getAspect(Walking).applyForce(this.v.scale(2));
-};
 
 function RunningAway() {
 }

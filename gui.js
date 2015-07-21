@@ -48,10 +48,6 @@ function repaint() {
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fillRect(0,0,width,height);
 	
-	for(var i=waters.length-1; i>=0; i--) {
-		waters[i].draw(ctx);
-	}
-	
 	for(var i=food.length-1; i>=0; i--) {
 		food[i].draw(ctx);
 	}

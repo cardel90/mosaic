@@ -3,21 +3,6 @@ var height;
 var cells = [];
 var colors = ['yellow', 'blue'];
 var food = [];
-var waters = [];
-
-function Water(position, radius) {
-	this.position = position;
-	this.radius = radius;
-}
-
-Water.prototype.draw = function(ctx) {
-	ctx.strokeStyle = 'black';
-	ctx.fillStyle = 'navy';
-	ctx.beginPath();
-	ctx.arc(this.position.x, this.position.y, this.radius, 0, 2*Math.PI);
-	ctx.stroke();
-	ctx.fill();
-}
 
 function Species(name, colors, aspectTypes, aspectArguments, ancestor) {
 	this.name = name;
