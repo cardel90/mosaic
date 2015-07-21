@@ -17,14 +17,14 @@ Cell.prototype.draw = function(ctx) {
 	ctx.strokeStyle = 'black';
 	ctx.fillStyle = this.color;
 	ctx.beginPath();
-	ctx.arc(this.position.x, this.position.y, this.fat, 0, 2*Math.PI);
+	ctx.arc(this.position.x, this.position.y, this.getSize(), 0, 2*Math.PI);
 	ctx.stroke();
 	ctx.fill();
 	ctx.closePath();
 
 	if(this === selected) {
 		ctx.beginPath();
-		ctx.arc(this.position.x, this.position.y, this.fat+5, 0, 2*Math.PI);
+		ctx.arc(this.position.x, this.position.y, this.getSize()+5, 0, 2*Math.PI);
 		ctx.stroke();
 		ctx.closePath();
 	}
@@ -104,7 +104,7 @@ function click(e) {
 		v = new Vector(x, y);
 	selected = undefined;
 	for(var i=0; i<cells.length; i++) {
-		if(cells[i].position.distance(v) <= cells[i].fat) {
+		if(cells[i].position.distance(v) <= cells[i].getSize()) {
 			selected = cells[i];
 			cellAside(selected);
 			break;
@@ -234,7 +234,7 @@ function createSpecies() {
 	showTab('simulation');
 }
 
-function changeTab(e) {
+function changeTab() {
 	var tabId = $(this).attr('data-tabid');
 	showTab(tabId);
 }

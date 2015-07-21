@@ -1,7 +1,6 @@
 var width;
 var height;
 var cells = [];
-var colors = ['yellow', 'blue'];
 var food = [];
 
 function Species(name, colors, aspectTypes, aspectArguments, ancestor) {
@@ -19,7 +18,6 @@ Species.prototype.makeCell = function(position) {
 	var color = this.colors[Math.floor(Math.random()*this.colors.length)];
 	var ncell = new Cell(position, color, this.aspectTypes, this.aspectArguments);
 	ncell.species = this;
-	ncell.cells = cells;
 	cells.push(ncell);
 	return ncell;
 }
@@ -50,7 +48,6 @@ var Cell = function(pos, color, aspectTypes, aspectArguments){
 	this.velocity = new Vector(0, 0);
 	this.color = color;
 	this.gender = Math.random()<0.5 ? 1 : 0;
-	this.fat = 10;
 	this.aspectTypes = aspectTypes;
 	this.aspects = {};
 	this.aspectList = [];
@@ -62,12 +59,12 @@ var Cell = function(pos, color, aspectTypes, aspectArguments){
 }
 
 Cell.prototype.getSize = function() {
-	return this.fat;
+	return this.getAspect(Eating).fat;
 }
 
 Cell.prototype.makeChild = function(position) {
 	var ncell = this.species.makeCell(this.position.plus(new Vector(20, 20)));
-	ncell.fat = ncell.getAspect(Eating).fat = this.getAspect(Eating).fat/2;
+	ncell.getAspect(Eating).fat = this.getAspect(Eating).fat/2;
 }
 
 Cell.prototype.vectorTo = function(other) {
@@ -79,7 +76,7 @@ Cell.prototype.distance = function(other) {
 }
 
 Cell.prototype.nearestCells = function(condition) {
-	var result = this.cells.slice(0).filter(condition);
+	var result = cells.slice(0).filter(condition);
 	var tcell = this;
 	var comparator = function(a, b){ return a.distance(tcell) - b.distance(tcell); };
 	result.sort(comparator);
@@ -130,9 +127,6 @@ Cell.prototype.sim = function() {
 
 function update() {
 
-	if(cells.length > 1000 || food.length > 10000)
-		return;
-
 	if(food.length<config.get('plant-growth'))
 		food.push(new Food(Vector.random(25, 25, width-50, height-50), Math.random()*10+1));
 	if(food.length>config.get('plant-growth'))
@@ -144,7 +138,7 @@ function update() {
 		var cell = cells[i];
 		cell.sim();
 		
-		if(cell.fat <= 2)
+		if(cell.getAspect(Eating).fat <= 2)
 			cells.splice(i, 1);
 	}
 	

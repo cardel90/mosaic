@@ -413,9 +413,6 @@ Eating.prototype.perform = function() {
 		this.hunger += (10-this.fat)/10;
 	if(this.fat > 15)
 		this.hunger = 0;
-	
-	// for legacy
-	this.cell.fat = this.fat;
 }
 
 Eating.prototype.feed = function(amount) {
@@ -547,6 +544,6 @@ Fission.prototype.perform = function() {
 	var eating = this.cell.getAspect(Eating);
 	if(eating.fat > this.threshold) {
 		this.cell.makeChild(this.cell.position.plus(new Vector(15, 15)));
-		this.cell.fat = eating.fat = eating.fat/2;
+		eating.fat = eating.fat/2;
 	}
 }
