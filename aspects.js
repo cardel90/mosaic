@@ -54,9 +54,11 @@ Grazing.pre = [Eating];
 FromOthers.post = [Walking];
 FromWalls.post = [Walking];
 FromWater.post = [Walking];
+Herding.pre = [Looking];
 Herding.post = [Walking];
+Mating.pre = [Looking];
 Mating.post = [Walking];
-Hunting.pre = [Eating];
+Hunting.pre = [Eating, Looking];
 Hunting.post = [Walking];
 Photosynthesis.pre = [Eating];
 
@@ -143,7 +145,9 @@ function Hunting() {
 
 Hunting.prototype.findPrey = function() {
 	var tcell = this.cell;
-	var tab = this.cell.nearestCells(function(c){return c.color != tcell.color;});
+	var tab = _.filter(this.cell.getAspect(Looking).seen, function(c){
+		return c.color != tcell.color;
+	});
 	if(tab.length > 0)
 		return tab[0];
 }
@@ -309,19 +313,23 @@ Herding.defaults = {
 Herding.prototype.prepare = function() {
 	var vel = new Vector(0, 0);
 	var loc = new Vector(0, 0);
+	this.vector = new Vector(0, 0);
 	
 	var tcell = this.cell;
-	var tab = this.cell.nearestCells(function(c){return c.color===tcell.color && c.distance(tcell)<100;});
+	var tab = _.filter(this.cell.getAspect(Looking).seen, function(c){
+		return c.color===tcell.color && c.distance(tcell)<100;
+	});
 	var n = tab.length;
-	for(var i=0; i<n; i++) {
-		var c = tab[i];
-		vel = vel.plus(c.velocity);
-		loc = loc.plus(c.position);
+	if(n>0) {
+		for(var i=0; i<n; i++) {
+			var c = tab[i];
+			vel = vel.plus(c.velocity);
+			loc = loc.plus(c.position);
+		}
+		var toLoc = loc.scale(1/n).minus(tcell.position).normalize();
+		
+		this.vector = vel.scale(1/n).plus(toLoc);
 	}
-	
-	var toLoc = loc.scale(1/n).minus(tcell.position).normalize();
-	
-	this.vector = vel.scale(1/n).plus(toLoc);
 };
 
 Herding.prototype.perform = function() {
