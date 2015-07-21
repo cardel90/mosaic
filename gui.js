@@ -122,6 +122,7 @@ function addCell() {
 	for(var i=0; i<species.length; i++) {
 		if(species[i].name == name) {
 			selected = species[i].makeCell(Vector.random(25, 25, width-50, height-50));
+			break;
 		}
 	}
 	repaint();
@@ -164,7 +165,7 @@ function makeCreator() {
 	$('species-creator').text('');
 	$result = $('<div>');
 	$result.append($('<label>').attr('for', 'species-name').text('Species name'));
-	$result.append($('<input>').attr('id', 'species-name'));
+	$result.append($('<input>').attr('id', 'species-name').val('Animal'));
 	$result.append('<br>');
 	$result.append($('<label>').attr('for', 'ancestor').text('Ancestor'));
 	var $select = $('<select>').attr('id', 'ancestor');
@@ -230,10 +231,11 @@ function createSpecies() {
 		}
 	}
 	var sp = new Species($('#species-name').val(), [$('#species-color').val()], aspectTypes, aspectArguments, ancestor);
-	species.push(sp);
+	species.unshift(sp);
 	
 	listSpecies();
 	$('#taxonomy').text('').append(makeTree(root));
+	showTab('simulation');
 }
 
 function changeTab(e) {
