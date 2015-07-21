@@ -190,7 +190,7 @@ Mating.prototype.prepare = function() {
 Mating.prototype.perform = function() {
 	if(this.mate !== undefined && this.mate.position.distance(this.cell.position) < 30) {
 		
-		this.cell.makeChild(this.cell.position.plus(this.mate.position).scale(0.5));
+		this.cell.makeChild();
 		
 		this.horny = -1;
 	}
@@ -543,7 +543,6 @@ Fission.defaults = {
 Fission.prototype.perform = function() {
 	var eating = this.cell.getAspect(Eating);
 	if(eating.fat > this.threshold) {
-		this.cell.makeChild(this.cell.position.plus(new Vector(15, 15)));
-		eating.fat = eating.fat/2;
+		this.cell.makeChild();
 	}
 }
