@@ -228,6 +228,12 @@ function createSpecies() {
 			break;
 		}
 	}
+	
+	var cost = 10*(1
+		+ _.difference(aspectTypes, ancestor.aspectTypes).length 
+		+ _.difference( ancestor.aspectTypes, aspectTypes).length);
+	score -= cost;
+	
 	var sp = new Species($('#species-name').val(), [$('#species-color').val()], aspectTypes, aspectArguments, ancestor);
 	species.unshift(sp);
 	
