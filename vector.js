@@ -1,7 +1,17 @@
 function Vector(x, y) {
-	this.x = x;
-	this.y = y;
+	this._x = x;
+	this._y = y;
 }
+
+Vector.prototype = {
+	get x() {
+		return this._x;
+	},
+	
+	get y() {
+		return this._y;
+	}
+};
 
 Vector.prototype.clone = function(){
 	return new Vector(this.x, this.y);
