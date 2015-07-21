@@ -56,6 +56,8 @@ function repaint() {
 	}
 	
 	cellAside(selected);
+	$('#score').text(score);
+	$('#cell-count').text(cells.length);
 }
 
 function play() {

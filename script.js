@@ -2,6 +2,7 @@ var width;
 var height;
 var cells = [];
 var food = [];
+var score = 0;
 
 function Species(name, colors, aspectTypes, aspectArguments, ancestor) {
 	this.name = name;
@@ -15,6 +16,7 @@ function Species(name, colors, aspectTypes, aspectArguments, ancestor) {
 }
 
 Species.prototype.makeCell = function(position) {
+	score++;
 	var color = this.colors[Math.floor(Math.random()*this.colors.length)];
 	var ncell = new Cell(position, color, this.aspectTypes, this.aspectArguments);
 	ncell.species = this;
