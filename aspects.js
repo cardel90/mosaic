@@ -191,14 +191,12 @@ function Mating() {
 
 Mating.prototype.findMate = function() {
 	var tcell = this.cell;
-	var tab = this.cell.nearestCells(function(c){return c.gender != tcell.gender;});
+	var tab = this.cell.nearestCells(function(c){return c.species === tcell.species && c.gender !== tcell.gender;});
 	if(tab.length > 0)
 		return tab[0];
 }
 
 Mating.prototype.prepare = function() {
-	if(this.cell.gender == 0)
-		return;
 	this.horny += Math.random()*0.01;
 	this.mate = this.findMate();
 }
@@ -226,8 +224,6 @@ Mating.prototype.draw = function(ctx) {
 };
 
 Mating.prototype.priority = function() {
-	if(this.cell.gender == 0)
-		return 0;
 	return this.mate === undefined ? 0 : this.horny;
 }
 

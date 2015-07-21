@@ -64,7 +64,7 @@ var Cell = function(pos, color, aspectTypes, aspectArguments){
 	this.position = pos;
 	this.velocity = new Vector(0, 0);
 	this.color = color;
-	this.gender = Math.random()<0.1 ? 1 : 0;
+	this.gender = Math.random()<0.5 ? 1 : 0;
 	this.fat = 10;
 	this.aspectTypes = aspectTypes;
 	this.aspects = {};
@@ -159,7 +159,7 @@ function update() {
 		var cell = cells[i];
 		cell.sim();
 		
-		if(cell.fat <= 1)
+		if(cell.fat <= 2)
 			cells.splice(i, 1);
 	}
 	
