@@ -103,15 +103,13 @@ RunningAway.defaults = {
 RunningAway.prototype.prepare = function() {
 	this.hunter = undefined;
 	var tcell = this.cell;
-	var tab = this.cell.nearestCells(function(c){return c.hasAspect(Hunting) && c.distance(tcell)<200;});
-	var n = tab.length;
-	for(var i=0; i<n; i++) {
-		var c = tab[i];
-		if(c.velocity.length() > 1 && 
-			c.velocity.dotReduced(tcell.position.minus(c.position)) > 0.5) {
-			this.hunter = c;
-			break;
-		}
+	var tab = _.filter(this.cell.getAspect(Looking).seen, function(c){
+		return c.hasAspect(Hunting)
+			&& c.velocity.length() > this.speedThreshold
+			&& c.velocity.dotReduced(tcell.position.minus(c.position)) > this.angleThreshold;
+	}, this);
+	if(tab.length>0) {
+		this.hunter = tab[0];
 	}
 }
 
@@ -134,6 +132,10 @@ RunningAway.prototype.draw = function(ctx) {
 
 RunningAway.prototype.priority = function() {
 	return this.hunter === undefined ? 0 : 100;
+}
+
+RunningAway.prototype.report = function() {
+	return this.hunter === undefined ? [] : [1];
 }
 
 function Hunting() {
