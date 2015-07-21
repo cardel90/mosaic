@@ -275,8 +275,8 @@ function initGui() {
 	$(document).keydown(keydown);
 
 	config.add(new ConfigParam('sim-speed', 'int', {min:0, max:100}, 70, 'Simulation speed', restart));
-	config.add(new ConfigParam('plant-growth', 'int', {min:0, max:100}, 20, 'Amount of plants'));
-	config.add(new ConfigParam('max-cells', 'int', {min:0, max:100}, 70, 'Max number of cells'));
+	config.add(new ConfigParam('plant-growth', 'int', {min:0, max:1000}, 20, 'Amount of plants'));
+	config.add(new ConfigParam('max-cells', 'int', {min:0, max:500}, 70, 'Max number of cells'));
 	config.add(new ConfigParam('draw-aspects', 'bool', {}, true, 'Draw aspect lines'));
 	
 	listSpecies();
