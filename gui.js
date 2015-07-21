@@ -281,5 +281,5 @@ function initGui() {
 
 	play();
 	
-	showTab('species-creator');
+	showTab('simulation');
 }

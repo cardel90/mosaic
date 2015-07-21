@@ -449,8 +449,8 @@ function Looking() {
 }
 
 Looking.defaults = {
-	angle: Math.PI*3/4,
-	range: 100
+	angle: Math.PI*2,
+	range: 200
 };
 
 function canvas_arrow(context, fromx, fromy, tox, toy){
@@ -496,7 +496,7 @@ Looking.prototype.perform = function() {
 	var tcell = this.cell;
 	var l = this;
 	this.seen = tcell.nearestCells(function(c){
-		return c.distance(tcell) < l.range && tcell.velocity.dot(c.position.minus(tcell.position)) > 0;
+		return c.distance(tcell) < l.range;// && tcell.velocity.dot(c.position.minus(tcell.position)) > 0;
 	});
 }
 
