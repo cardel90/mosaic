@@ -272,6 +272,7 @@ function initGui() {
 	$('#canvas').click(click);
 	$('.showtab').click(changeTab);
 	$('#add').click(addCell);
+	$('#init').click(devInit);
 	$(document).keydown(keydown);
 
 	config.add(new ConfigParam('sim-speed', 'int', {min:0, max:100}, 70, 'Simulation speed', restart));

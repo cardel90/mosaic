@@ -152,26 +152,29 @@ function update() {
 }
 
 function devInit() {
-	var deer = new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering], {Herding: {strength: 2}});
-	var bear = new Species('Niedźwiedź', ['teal'], [Looking, FromWalls, Walking, Eating, Grazing, Hunting, Wandering], {}, deer);
-	var wolf = new Species('Wilk', ['red'], [Looking, Walking, Eating, Hunting, Wandering], {}, bear);
-	var sparrow = new Species('Wróbel', ['brown'], [Walking, Looking, RunningAway, FromWalls, Mating, Herding, FromOthers, Eating, Grazing, Wandering], {Walking: {topSpeed: 10, agility: 0.6}, Herding:{strength: 0.1}}, bear);
-	species = [deer];//, wolf, bear, sparrow];
-	root = deer;
-	return;
+	var deer = new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering], {Herding: {strength: 2}}, root);
+	var bear = new Species('Niedźwiedź', ['teal'], [Looking, FromWalls, Walking, Eating, Grazing, Hunting, Wandering], {}, root);
+	var wolf = new Species('Wilk', ['red'], [Looking, Walking, Eating, Hunting, Wandering], {}, root);
+	var sparrow = new Species('Wróbel', ['brown'], [Walking, Looking, RunningAway, FromWalls, Mating, Herding, FromOthers, Eating, Grazing, Wandering], {Walking: {topSpeed: 10, agility: 0.6}, Herding:{strength: 0.1}}, root);
+	species = species.concat([deer, wolf, bear, sparrow]);
+	
+	listSpecies();
+	$('#taxonomy').text('').append(makeTree(root));
+	
 	for(var i=0; i<30; i++) {
-		species[0].makeCell(Vector.random(25, 25, width-50, height-50));
+		deer.makeCell(Vector.random(25, 25, width-50, height-50));
 	}
 	
-	species[1].makeCell(Vector.random(25, 25, width-50, height-50));
-	species[1].makeCell(Vector.random(25, 25, width-50, height-50));
+	wolf.makeCell(Vector.random(25, 25, width-50, height-50));
+	wolf.makeCell(Vector.random(25, 25, width-50, height-50));
 }
 
 $(function(){
 	width = $('canvas').get(0).width;
 	height = $('canvas').get(0).height;
 
-	devInit();
+	root = new Species('Alga', ['lime'], [Looking, Walking, Eating, Photosynthesis, Fission, FromOthers], {});
+	species = [root];
 	initGui();
 	update();
 })
