@@ -185,9 +185,13 @@ function makeCreator() {
 		var $checkbox = $('<input>');
 		$checkbox.attr('type', 'checkbox');
 		$checkbox.attr('id', aspect.name+'-selected');
-		$checkbox.click(function(){
+		$checkbox.change(function(){
 			$(this).parent().toggleClass('aspect-selected');
 		});
+		if(aspect.required) {
+			$checkbox.prop('disabled', true).prop('checked', true);
+			$div.addClass('aspect-selected');
+		}
 		$div.append($checkbox);
 		$div.append($('<label>').attr('for', aspect.name+'-selected').text(aspect.name));
 		for(var j in aspect.defaults) {

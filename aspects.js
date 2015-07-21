@@ -60,6 +60,8 @@ Hunting.pre = [Eating];
 Hunting.post = [Walking];
 Photosynthesis.pre = [Eating];
 
+Wandering.required = Walking.required = Eating.required = true;
+
 function loadAspect(cell, aspect, aspectArguments) {
 	var result = new (Function.prototype.bind.call(aspect));
 	_.extend(result, aspect.defaults, aspectArguments);
