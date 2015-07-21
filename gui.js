@@ -249,6 +249,16 @@ function showTab(tabId) {
 	$('.showtab[data-tabid="'+tabId+'"]').addClass('activetab');
 }
 
+function keydown(e) {
+	if(e.target.localName==='button' || e.target.localName==='input')
+		return;
+	switch(e.which) {
+		case 32:
+			play();
+			break;
+	}
+}
+
 function initGui() {
 	canvas = $('canvas').get(0);
 	
@@ -256,6 +266,7 @@ function initGui() {
 	$('#canvas').click(click);
 	$('.showtab').click(changeTab);
 	$('#add').click(addCell);
+	$(document).keydown(keydown);
 
 	config.add(new ConfigParam('sim-speed', 'int', {min:0, max:100}, 70, 'Simulation speed', restart));
 	config.add(new ConfigParam('plant-growth', 'int', {min:0, max:100}, 20, 'Amount of plants'));
