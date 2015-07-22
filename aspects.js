@@ -308,8 +308,9 @@ Herding.prototype.prepare = function() {
 			loc = loc.plus(c.position);
 		}
 		var toLoc = loc.scale(1/n).minus(tcell.position).normalize();
+		var toVel = vel.scale(1/n).minus(tcell.getAspect(Walking).velocity).normalize();
 		
-		this.vector = vel.scale(1/n).plus(toLoc);
+		this.vector = toVel.plus(toLoc);
 	}
 };
 
