@@ -71,6 +71,10 @@ Vector.prototype.angle = function() {
 	return Math.atan2(this.y, this.x);
 }
 
+Vector.prototype.toString = function() {
+	return "["+this.x+"; "+this.y+"]";
+}
+
 Vector.random = function(x, y, w, h) {
 	return new Vector(x + Math.random()*w, y+Math.random()*h);
 }
