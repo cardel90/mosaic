@@ -6,6 +6,20 @@ var cells = [];
 var food = [];
 var score = 0;
 
+function Food(position, amount) {
+	this.position = position;
+	this.amount = amount;
+}
+
+Food.prototype.draw = function(ctx) {
+	ctx.strokeStyle = 'black';
+	ctx.fillStyle = '#66CC33';
+	ctx.beginPath();
+	ctx.arc(this.position.x, this.position.y, this.amount, 0, 2*Math.PI);
+	ctx.stroke();
+	ctx.fill();
+}
+
 function Species(name, colors, aspectTypes, aspectArguments, ancestor) {
 	this.name = name;
 	this.colors = colors;
@@ -24,20 +38,6 @@ Species.prototype.makeCell = function(position) {
 	ncell.species = this;
 	cells.push(ncell);
 	return ncell;
-}
-
-function Food(position, amount) {
-	this.position = position;
-	this.amount = amount;
-}
-
-Food.prototype.draw = function(ctx) {
-	ctx.strokeStyle = 'black';
-	ctx.fillStyle = '#66CC33';
-	ctx.beginPath();
-	ctx.arc(this.position.x, this.position.y, this.amount, 0, 2*Math.PI);
-	ctx.stroke();
-	ctx.fill();
 }
 
 var Cell = function(pos, color, aspectTypes, aspectArguments){
@@ -59,19 +59,12 @@ Cell.prototype.getSize = function() {
 	return this.getAspect(Eating).fat;
 }
 
-Cell.prototype.makeChild = function() {
-	var ncell = this.species.makeCell(this.position.plus(Vector.random(-10, -10, 20, 20)));
-	var f = this.getAspect(Eating).fat;
-	this.getAspect(Eating).fat = 2*f/3;
-	ncell.getAspect(Eating).fat = f/3;
+Cell.prototype.getAspect = function(a) {
+	return this.aspects[a.name];
 }
 
-Cell.prototype.vectorTo = function(other) {
-	return other.position.minus(this.position);
-}
-
-Cell.prototype.distance = function(other) {
-	return other.position.minus(this.position).length();
+Cell.prototype.hasAspect = function(a) {
+	return (a.name in this.aspects);
 }
 
 Cell.prototype.nearestCells = function(maxDistance) {
@@ -80,17 +73,14 @@ Cell.prototype.nearestCells = function(maxDistance) {
 		return c.position.distance(tcell.position) <= maxDistance;
 	});
 	
-	//var comparator = function(a, b){ return a.distance(tcell) - b.distance(tcell); };
-	//result.sort(comparator);
 	return result;
 }
 
-Cell.prototype.getAspect = function(a) {
-	return this.aspects[a.name];
-}
-
-Cell.prototype.hasAspect = function(a) {
-	return (a.name in this.aspects);
+Cell.prototype.makeChild = function() {
+	var ncell = this.species.makeCell(this.position.plus(Vector.random(-10, -10, 20, 20)));
+	var f = this.getAspect(Eating).fat;
+	this.getAspect(Eating).fat = 2*f/3;
+	ncell.getAspect(Eating).fat = f/3;
 }
 
 Cell.prototype.sim = function() {

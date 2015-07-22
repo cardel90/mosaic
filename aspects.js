@@ -162,7 +162,7 @@ Hunting.prototype.draw = function(ctx) {
 };
 
 Hunting.prototype.priority = function() {
-	return this.prey === undefined ? 0 : this.cell.getAspect(Eating).hunger - this.prey.distance(this.cell)/100;
+	return this.prey === undefined ? 0 : this.cell.getAspect(Eating).hunger - this.prey.position.distance(this.cell.position)/100;
 }
 
 Hunting.prototype.report = function() {
@@ -246,7 +246,7 @@ function FromOthers() {
 }
 
 FromOthers.modifiedDistance = function(from, to) {
-	var d = from.distance(to)-1.1*to.getSize()-from.getSize();
+	var d = from.position.distance(to.position)-1.1*to.getSize()-from.getSize();
 	return d<=0 ? 0.001 : d;
 }
 
@@ -260,7 +260,7 @@ FromOthers.prototype.prepare = function() {
 	for(var i=0; i<this.tab.length; i++) {
 		var c = this.tab[i];
 		var d = FromOthers.modifiedDistance(tcell, c);
-		var v = this.cell.vectorTo(c);
+		var v = c.position.minus(this.cell.position);
 		x -= 1*v.x/(d*d);
 		y -= 1*v.y/(d*d);
 	}
@@ -297,7 +297,7 @@ Herding.prototype.prepare = function() {
 	
 	var tcell = this.cell;
 	var tab = _.filter(this.cell.getAspect(Looking).seen, function(c){
-		return c.color===tcell.color && c.distance(tcell)<100;
+		return c.color===tcell.color && c.position.distance(tcell.position)<100;
 	});
 	var n = tab.length;
 	if(n>0) {
