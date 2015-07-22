@@ -148,7 +148,7 @@ Hunting.prototype.perform = function() {
 		return;
 	}
 		
-	var f = this.prey.position.minus(this.cell.position).normalize().scale(2);
+	var f = this.prey.position.minus(this.cell.position).normalize().scale(1.5);
 	this.cell.getAspect(Walking).applyForce(f);
 };
 
@@ -192,7 +192,6 @@ Mating.prototype.perform = function() {
 	if(this.mate !== undefined && this.mate.position.distance(this.cell.position) < 30) {
 		
 		this.cell.makeChild();
-		
 		this.horny = -1;
 	}
 		
@@ -298,7 +297,7 @@ Herding.prototype.prepare = function() {
 	
 	var tcell = this.cell;
 	var tab = _.filter(this.cell.getAspect(Looking).seen, function(c){
-		return c.color===tcell.color && c.position.distance(tcell.position)<100;
+		return c!==tcell && c.color===tcell.color && c.position.distance(tcell.position)<100;
 	});
 	var n = tab.length;
 	if(n>0) {
@@ -314,7 +313,7 @@ Herding.prototype.prepare = function() {
 };
 
 Herding.prototype.perform = function() {
-	this.cell.getAspect(Walking).applyForce(this.vector.scale(this.strength));
+	this.cell.getAspect(Walking).applyForce(this.vector.normalize().scale(this.strength));
 };
 
 function Grazing() {
@@ -357,7 +356,7 @@ Grazing.prototype.perform = function() {
 		this.cell.getAspect(Eating).feed(0.1);
 	}
 	if(d>0) {
-		var f = this.target.position.minus(this.cell.position).normalize().scale(1.5);
+		var f = this.target.position.minus(this.cell.position).normalize().scale(1);
 		this.cell.getAspect(Walking).applyForce(f);
 	}
 };
@@ -507,7 +506,7 @@ function Walking(args) {
 
 Walking.defaults = {
 	topSpeed: 2,
-	agility: 0.2
+	agility: 2
 };
 
 Walking.prototype.applyForce = function(f) {
@@ -521,21 +520,25 @@ Walking.prototype.prepare = function() {
 }
 
 Walking.prototype.perform = function() {
-	var desired = new Vector(0, 0);
-	
-	if(this.forceCount > 0)
-		desired = desired.plus(this.force.scale(2/this.forceCount));
-	
-	desired = desired.capLength(this.topSpeed);
-	
-	desired = desired.scale(0.6*(20-this.cell.getSize())/20 + 0.7);
-	this.velocity = this.velocity.plus(desired.minus(this.velocity).scale(this.agility));
+
+	if(this.forceCount > 0) {
+		this.force = this.force.scale(1/this.forceCount).scale(0.6*(20-this.cell.getSize())/20 + 0.7);
+		this.velocity = this.velocity.plus(this.force.scale(this.agility)).capLength(this.topSpeed);
+	}
 	
 	// for legacy
 	this.cell.velocity = this.velocity;
 	this.cell.position = this.cell.position.plus(this.velocity);
 }
 
+Walking.prototype.draw = function(ctx) {
+	ctx.beginPath();
+	ctx.strokeStyle = '#FF00FF';
+	ctx.moveTo(this.cell.position.x, this.cell.position.y);
+	var t = this.cell.position.plus(this.force.scale(50));
+	ctx.lineTo(t.x, t.y);
+	ctx.stroke();
+}
 
 Walking.prototype.report = function() {
 	return [this.forceCount];
