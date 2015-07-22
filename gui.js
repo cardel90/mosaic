@@ -61,6 +61,10 @@ function repaint() {
 	$('#score').text(score);
 	$('#cell-count').text(cells.length);
 	
+	$('#missions').text('');
+	for(var i=0; i<missions.length; i++)
+		$('#missions').append(showMission(missions[i]));
+	
 	var time = new Date().getTime();
 	var delta = time-lastFrame;
 	lastFrame = time;
@@ -251,6 +255,14 @@ function createSpecies() {
 	listSpecies();
 	$('#taxonomy').text('').append(makeTree(root));
 	showTab('simulation');
+}
+
+function showMission(mission) {
+	var $result = $('<div>').addClass('mission');
+	if(mission.completed)
+		$result.addClass('completed');
+	$result.text(mission.name);
+	return $result;
 }
 
 function changeTab() {

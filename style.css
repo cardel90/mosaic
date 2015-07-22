@@ -73,3 +73,11 @@ canvas {
 .aspect-selected {
 	opacity: 1;
 }
+
+.mission {
+	color: red;
+}
+
+.mission.completed {
+	color: green;
+}
