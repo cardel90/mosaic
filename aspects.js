@@ -486,10 +486,16 @@ Looking.prototype.report = function() {
 function Photosynthesis() {
 }
 
+Photosynthesis.defaults = {
+	range: 200
+};
+
 Photosynthesis.prototype.perform = function() {
 	var eating = this.cell.getAspect(Eating);
-	var d = (this.cell.position.distance(new Vector(width/2, height/2))+10);
-	eating.feed(1/d);
+	var d = this.range - (this.cell.position.distance(new Vector(width/2, height/2)));
+	if(d<0)
+		d = 0;
+	eating.feed(0.05*d/this.range);
 }
 
 function Walking(args) {
