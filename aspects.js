@@ -380,16 +380,16 @@ Grazing.prototype.report = function() {
 }
 
 function Wandering() {
-	this.speed = new Vector(0, 0);
+	this.desired = new Vector(0, 0);
 	this.target = Vector.random(25, 25, width-50, height-50);
 }
 
 Wandering.prototype.perform = function() {
 	if(Math.random()<0.001 || this.target.distance(this.cell.position)<10)
 		this.target = Vector.random(25, 25, width-50, height-50);
-	var desired = this.target.minus(this.cell.position).normalize();
-	this.speed = this.speed.plus(desired.minus(this.speed).normalize().scale(0.01));
-	this.cell.getAspect(Walking).applyForce(this.speed.capLength(0.5));
+	var ideal = this.target.minus(this.cell.position).normalize();
+	this.desired = this.desired.plus(ideal.minus(this.desired).scale(0.01));
+	this.cell.getAspect(Walking).applyForce(this.desired.minus(this.cell.velocity).normalize().scale(0.5));
 };
 
 Wandering.prototype.draw = function(ctx) {
@@ -533,7 +533,7 @@ Walking.prototype.perform = function() {
 
 Walking.prototype.draw = function(ctx) {
 	ctx.beginPath();
-	ctx.strokeStyle = '#FF00FF';
+	ctx.strokeStyle = 'lime';
 	ctx.moveTo(this.cell.position.x, this.cell.position.y);
 	var t = this.cell.position.plus(this.force.scale(50));
 	ctx.lineTo(t.x, t.y);

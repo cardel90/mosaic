@@ -146,7 +146,7 @@ function update() {
 function devInit() {
 	var deer = new Species('Sarna', ['yellow', 'blue'], [Looking, RunningAway, FromWalls, Mating, Walking, Herding, FromOthers, Eating, Grazing, Wandering], {}, root);
 	var bear = new Species('Niedźwiedź', ['teal'], [Looking, FromWalls, Walking, Eating, Grazing, Hunting, Wandering], {}, root);
-	var wolf = new Species('Wilk', ['red'], [Looking, Walking, Eating, Hunting, Wandering], {Walking:{topSpeed:3}}, root);
+	var wolf = new Species('Wilk', ['red'], [FromOthers, Looking, Walking, Eating, Hunting, Wandering], {Walking:{topSpeed:3}}, root);
 	species = species.concat([deer, wolf, bear]);
 	
 	listSpecies();
