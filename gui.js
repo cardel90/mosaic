@@ -1,6 +1,7 @@
 var canvas;
 var interval;
 var selected;
+var frames = [];
 
 Mating.prototype.color = 'pink';
 Hunting.prototype.color = 'red';
@@ -58,6 +59,12 @@ function repaint() {
 	cellAside(selected);
 	$('#score').text(score);
 	$('#cell-count').text(cells.length);
+	
+	var time = new Date().getTime();
+	while(frames.length>0 && frames[0] < time-5000)
+		frames.splice(0, 1);
+	frames.push(time);
+	$('#fps').text(frames.length/5);
 }
 
 function play() {
