@@ -60,6 +60,7 @@ Mating.post = [Walking];
 Hunting.pre = [Eating, Looking];
 Hunting.post = [Walking];
 Photosynthesis.pre = [Eating];
+Photosynthesis.post = [Walking];
 
 Looking.required = Walking.required = Eating.required = true;
 
@@ -492,10 +493,12 @@ Photosynthesis.defaults = {
 
 Photosynthesis.prototype.perform = function() {
 	var eating = this.cell.getAspect(Eating);
-	var d = this.range - (this.cell.position.distance(new Vector(width/2, height/2)));
+	var center = new Vector(width/2, height/2);
+	var d = this.range - (this.cell.position.distance(center));
 	if(d<0)
 		d = 0;
 	eating.feed(0.05*d/this.range);
+	this.cell.getAspect(Walking).applyForce(center.minus(this.cell.position).normalize().scale(0.1));
 }
 
 function Walking(args) {
