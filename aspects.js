@@ -190,7 +190,9 @@ Mating.prototype.prepare = function() {
 }
 
 Mating.prototype.perform = function() {
-	if(this.mate !== undefined && this.mate.position.distance(this.cell.position) < 30) {
+	if(this.mate === undefined)
+		return;
+	if(this.mate.position.distance(this.cell.position) < this.cell.getSize()+this.mate.getSize()+5) {
 		
 		this.cell.makeChild();
 		this.horny = -1;
