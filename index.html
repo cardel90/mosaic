@@ -13,47 +13,55 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
+	<div id="top">
+		<nav>
+			<button class="showtab" data-tabid="simulation">Sim</button>
+			<button class="showtab" data-tabid="species">Species</button>
+			<button class="showtab" data-tabid="taxonomy">Taxonomy</button>
+			<button class="showtab" data-tabid="species-creator">Creator</button>
+			<button class="showtab" data-tabid="configuration">Config</button>
+		</nav>
+		
+		<div id="info">
+			Score: <span id="score"></span>
+			Cells: <span id="cell-count"></span>
+			FPS: <span id="fps"></span>
+		</div>
+	</div>
 	
-	<nav>
-		<button class="showtab" data-tabid="simulation">Sim</button>
-		<button class="showtab" data-tabid="species">Species</button>
-		<button class="showtab" data-tabid="taxonomy">Taxonomy</button>
-		<button class="showtab" data-tabid="species-creator">Creator</button>
-		<button class="showtab" data-tabid="configuration">Config</button>
-	</nav>
-	
-	<div id="simulation" class="tab">
-		<div id="sidebox">
-			<div id="controls">
-				Score: <span id="score"></span><br>
-				Cells: <span id="cell-count"></span><br>
-				FPS: <span id="fps"></span><br>
-				<button id="play">Play</button><br>
-				<button id="init">Dev init</button><br>
+	<div id="content">
+			
+		<div id="simulation" class="tab">
+			<div id="sidebox">
+				<div id="controls">
+					<button id="play">Play</button><br>
+					<button id="init">Dev init</button><br>
+				</div>
+				<div id="adder">
+					<select></select>
+					<button id="add">Add</button>
+				</div>
+				<div id="cell"></div>
 			</div>
-			<div id="adder">
-				<select></select>
-				<button id="add">Add</button>
-			</div>
-			<div id="cell"></div>
+			
+			<canvas id="canvas" width="800" height="600">
+			No canvas.
+			</canvas>
 		</div>
 		
-		<canvas id="canvas" width="800" height="600">
-		No canvas.
-		</canvas>
-	</div>
-	
-	<div id="species" class="tab">
-	</div>
-	
-	<div id="configuration" class="tab">
-	</div>
-	
-	<div id="taxonomy" class="tab">
+		<div id="species" class="tab">
+		</div>
 		
-	</div>
-	
-	<div id="species-creator" class="tab">
+		<div id="configuration" class="tab">
+		</div>
+		
+		<div id="taxonomy" class="tab">
+			
+		</div>
+		
+		<div id="species-creator" class="tab">
+		</div>
+		
 	</div>
 </body>
 </html>
