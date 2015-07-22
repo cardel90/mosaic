@@ -3,16 +3,16 @@ var interval;
 var selected;
 var frames = [];
 
-Mating.prototype.color = 'pink';
-Hunting.prototype.color = 'red';
-RunningAway.prototype.color = 'violet';
-Grazing.prototype.color = 'green';
-Wandering.prototype.color = 'lightgrey';
-Looking.prototype.color = 'lightblue';
-Herding.prototype.color = 'brown';
-Eating.prototype.color = 'yellow';
-Walking.prototype.color = 'orange';
-Photosynthesis.prototype.color = 'lightgreen';
+Mating.color = 'pink';
+Hunting.color = 'red';
+RunningAway.color = 'violet';
+Grazing.color = 'green';
+Wandering.color = 'lightgrey';
+Looking.color = 'lightblue';
+Herding.color = 'brown';
+Eating.color = 'yellow';
+Walking.color = 'orange';
+Photosynthesis.color = 'lightgreen';
 
 Cell.prototype.draw = function(ctx) {
 	ctx.strokeStyle = 'black';
@@ -91,7 +91,7 @@ function cellAside(cell) {
 	for(var aName in cell.aspects) {
 		var a = cell.aspects[aName];
 		var node = $('<div>');
-		node.css('background-color', a.color ? a.color : 'grey');
+		node.css('background-color', a.aspectType.color ? a.aspectType.color : 'grey');
 		if(a===cell.top) {
 			node.addClass('top-behavior');
 		}
@@ -184,7 +184,7 @@ function makeCreator() {
 	for(var i=0; i<allAspects.length; i++) {
 		var aspect = allAspects[i];
 		var $div = $('<div>');
-		var color = aspect.prototype.color ? aspect.prototype.color : 'grey';
+		var color = aspect.color ? aspect.color : 'grey';
 		$div.css('background-color', color);
 		$div.addClass('aspect');
 		$div.attr('id', aspect.name+'-div');

@@ -63,10 +63,11 @@ Photosynthesis.pre = [Eating];
 
 Looking.required = Walking.required = Eating.required = true;
 
-function loadAspect(cell, aspect, aspectArguments) {
-	var result = new (Function.prototype.bind.call(aspect));
-	_.extend(result, aspect.defaults, aspectArguments);
+function loadAspect(cell, aspectType, aspectArguments) {
+	var result = new (Function.prototype.bind.call(aspectType));
+	_.extend(result, aspectType.defaults, aspectArguments);
 	result.cell = cell;
+	result.aspectType = aspectType;
 	return result;
 }
 
