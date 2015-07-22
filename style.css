@@ -17,6 +17,11 @@ nav {
 	clear: both;
 }
 
+footer {
+	text-align: center;
+	font-size: small;
+}
+
 canvas { 
 	border: 2px solid black;
 }
