@@ -1,7 +1,8 @@
 var canvas;
 var interval;
 var selected;
-var frames = [];
+var lastFrame = 0;
+var fps = 0;
 
 Mating.color = 'pink';
 Hunting.color = 'red';
@@ -61,10 +62,13 @@ function repaint() {
 	$('#cell-count').text(cells.length);
 	
 	var time = new Date().getTime();
-	while(frames.length>0 && frames[0] < time-5000)
-		frames.splice(0, 1);
-	frames.push(time);
-	$('#fps').text(frames.length/5);
+	var delta = time-lastFrame;
+	lastFrame = time;
+	
+	var d = 0.01;
+	fps = (1-d)*fps + d * 1000/delta;
+
+	$('#fps').text(Math.round(fps));
 }
 
 function play() {
