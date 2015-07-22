@@ -527,7 +527,7 @@ Walking.prototype.perform = function() {
 	}
 	
 	// for legacy
-	this.cell.velocity = this.velocity;
+	this.cell.velocity = this.velocity = this.velocity.scale(0.9);
 	this.cell.position = this.cell.position.plus(this.velocity);
 }
 
