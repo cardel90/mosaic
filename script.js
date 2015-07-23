@@ -48,6 +48,7 @@ var Cell = function(pos, color, aspectTypes, aspectArguments){
 	this.aspectTypes = aspectTypes;
 	this.aspects = {};
 	this.aspectList = [];
+	this.alive = true;
 	for(var i=0; i<this.aspectTypes.length; i++) {
 		var aspect = loadAspect(this, this.aspectTypes[i], aspectArguments[this.aspectTypes[i].name]);
 		this.aspects[this.aspectTypes[i].name] = aspect;
@@ -65,6 +66,10 @@ Cell.prototype.getAspect = function(a) {
 
 Cell.prototype.hasAspect = function(a) {
 	return (a.name in this.aspects);
+}
+
+Cell.prototype.die = function() {
+	this.alive = false;
 }
 
 Cell.prototype.nearestCells = function(maxDistance) {
@@ -130,7 +135,7 @@ function update() {
 		var cell = cells[i];
 		cell.sim();
 		
-		if(cell.getAspect(Eating).fat <= 4)
+		if(!cell.alive)
 			cells.splice(i, 1);
 	}
 	

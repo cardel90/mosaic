@@ -127,6 +127,9 @@ Looking.prototype.prepare = function() {
 	this.seen = this.cell.nearestCells(this.range);
 }
 
+Looking.prototype.perform = function() {
+}
+
 Looking.prototype.report = function() {
 	return [this.seen.length];
 }
@@ -257,6 +260,8 @@ Eating.prototype.perform = function() {
 		this.hunger += (10-this.fat)/10;
 	if(this.fat > 15)
 		this.hunger = 0;
+	if(this.fat <= 4)
+		this.cell.die();
 }
 
 Eating.prototype.feed = function(amount) {
@@ -373,8 +378,7 @@ Hunting.prototype.perform = function() {
 	var d = this.prey.position.distance(this.cell.position) - this.prey.getSize() - this.cell.getSize();
 	if(d < 5) {
 		this.cell.getAspect(Eating).feed(this.prey.getAspect(Eating).fat);
-		// should this be in eating?
-		this.prey.getAspect(Eating).fat = 0;
+		this.prey.die();
 		return;
 	}
 		
