@@ -4,6 +4,23 @@ var selected;
 var lastFrame = 0;
 var fps = 0;
 
+var selectCursor = {
+	click: function(x, y) {
+		var v = new Vector(x, y);
+		selected = undefined;
+		for(var i=0; i<cells.length; i++) {
+			if(cells[i].position.distance(v) <= cells[i].getSize()) {
+				selected = cells[i];
+				cellAside(selected);
+				break;
+			}
+		}
+		repaint();
+	}
+};
+
+var cursor = selectCursor;
+
 Mating.color = 'pink';
 Hunting.color = 'red';
 RunningAway.color = 'violet';
@@ -113,21 +130,6 @@ function cellAside(cell) {
 		node.text(aName + ' : ' + str);
 		$('#cell').append(node);
 	}
-}
-
-function click(e) {
-	var x = e.pageX - $(this).offset().left,
-		y = e.pageY - $(this).offset().top,
-		v = new Vector(x, y);
-	selected = undefined;
-	for(var i=0; i<cells.length; i++) {
-		if(cells[i].position.distance(v) <= cells[i].getSize()) {
-			selected = cells[i];
-			cellAside(selected);
-			break;
-		}
-	}
-	repaint();
 }
 
 function addCell() {
@@ -288,11 +290,17 @@ function keydown(e) {
 	}
 }
 
+function canvasClick(e) {
+	var x = e.pageX - $(this).offset().left,
+		y = e.pageY - $(this).offset().top;
+	cursor.click(x, y);
+}
+
 function initGui() {
 	canvas = $('canvas').get(0);
 	
 	$('#play').click(play);
-	$('#canvas').click(click);
+	$('#canvas').click(canvasClick);
 	$('.showtab').click(changeTab);
 	$('#add').click(addCell);
 	$('#init').click(devInit);
