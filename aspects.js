@@ -123,7 +123,7 @@ Looking.prototype.draw = function(ctx) {
 	}
 }
 
-Looking.prototype.perform = function() {
+Looking.prototype.prepare = function() {
 	this.seen = this.cell.nearestCells(this.range);
 }
 
