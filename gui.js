@@ -3,6 +3,7 @@ var interval;
 var selected;
 var lastFrame = 0;
 var fps = 0;
+var mouseX, mouseY;
 
 function SelectCursor() {
 	this.click = function(x, y) {
@@ -23,6 +24,14 @@ function AddCellCursor(species) {
 	this.click = function(x, y) {
 		species.makeCell(new Vector(x,y));
 	};
+	
+	this.draw = function(ctx, x, y) {
+		ctx.strokeStyle = 'grey';
+		ctx.beginPath();
+		ctx.arc(x, y, 10, 0, 2*Math.PI);
+		ctx.stroke();
+		ctx.closePath();
+	}
 }
 
 var cursor = new SelectCursor();
@@ -79,6 +88,9 @@ function repaint() {
 	for(var i=cells.length-1; i>=0; i--) {
 		cells[i].draw(ctx);
 	}
+	
+	if(cursor.draw)
+		cursor.draw(ctx, mouseX, mouseY);
 	
 	cellAside(selected);
 	$('#score').text(score);
@@ -288,9 +300,15 @@ function showTab(tabId) {
 function keydown(e) {
 	if(e.target.localName==='button' || e.target.localName==='input')
 		return;
+	console.log(e.which);
 	switch(e.which) {
+		// space
 		case 32:
 			play();
+			break;
+		// Esc
+		case 27:
+			cursor = new SelectCursor();
 			break;
 	}
 }
@@ -301,11 +319,17 @@ function canvasClick(e) {
 	cursor.click(x, y);
 }
 
+function canvasMove(e) {
+	mouseX = e.pageX - $(this).offset().left,
+	mouseY = e.pageY - $(this).offset().top;
+}
+
 function initGui() {
 	canvas = $('canvas').get(0);
 	
 	$('#play').click(play);
 	$('#canvas').click(canvasClick);
+	$('#canvas').mousemove(canvasMove);
 	$('.showtab').click(changeTab);
 	$('#add').click(addCell);
 	$('#init').click(devInit);
