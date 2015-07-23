@@ -4,8 +4,8 @@ var selected;
 var lastFrame = 0;
 var fps = 0;
 
-var selectCursor = {
-	click: function(x, y) {
+function SelectCursor() {
+	this.click = function(x, y) {
 		var v = new Vector(x, y);
 		selected = undefined;
 		for(var i=0; i<cells.length; i++) {
@@ -16,10 +16,16 @@ var selectCursor = {
 			}
 		}
 		repaint();
-	}
-};
+	};
+}
 
-var cursor = selectCursor;
+function AddCellCursor(species) {
+	this.click = function(x, y) {
+		species.makeCell(new Vector(x,y));
+	};
+}
+
+var cursor = new SelectCursor();
 
 Mating.color = 'pink';
 Hunting.color = 'red';
@@ -136,11 +142,10 @@ function addCell() {
 	var name = $('#adder select').val();
 	for(var i=0; i<species.length; i++) {
 		if(species[i].name == name) {
-			selected = species[i].makeCell(Vector.random(25, 25, width-50, height-50));
+			cursor = new AddCellCursor(species[i]);
 			break;
 		}
 	}
-	repaint();
 }
 
 function listSpecies() {
